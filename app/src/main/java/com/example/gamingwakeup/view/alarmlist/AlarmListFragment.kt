@@ -21,10 +21,8 @@ class AlarmListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentAlarmListBinding.inflate(layoutInflater)
-
         val viewModelFactory = AlarmListViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory).get(AlarmListViewModel::class.java)
-
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
         binding.fragmentAlarmList.adapter = AlarmListAdapter()

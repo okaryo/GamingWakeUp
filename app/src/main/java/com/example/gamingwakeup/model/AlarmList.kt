@@ -1,3 +1,3 @@
 package com.example.gamingwakeup.model
 
-class AlarmList(val values: List<Alarm>)
+data class AlarmList(val values: List<Alarm>)

@@ -13,6 +13,11 @@ class AlarmListViewModel : ViewModel() {
 
     init {
         _alarmList.value =
-            AlarmList(listOf(Alarm(1, 29, 10, false,  true), Alarm(18, 39, 12, false, false)))
+            AlarmList(
+                listOf(
+                    Alarm(1, 29, 10, false,  true),
+                    Alarm(18, 39, 12, false, false)
+                )
+            )
     }
 }
