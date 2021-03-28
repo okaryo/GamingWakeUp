@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Gaming Wake Up</string>
+    <string name="alarm_time">%1$02d:%2$d</string>
 </resources>
