@@ -11,6 +11,10 @@ class AlarmListViewModel : ViewModel() {
     val alarmList: LiveData<AlarmList>
         get() = _alarmList
 
+    private val _navigateToAlarmDetailEdit = MutableLiveData<Alarm>()
+    val navigateToAlarmDetailEdit: LiveData<Alarm>
+        get() = _navigateToAlarmDetailEdit
+
     init {
         _alarmList.value =
             AlarmList(
@@ -19,5 +23,9 @@ class AlarmListViewModel : ViewModel() {
                     Alarm(18, 39, 12, false, false)
                 )
             )
+    }
+
+    fun navigateToAlarmDetailEdit(alarm: Alarm) {
+        _navigateToAlarmDetailEdit.value = alarm
     }
 }

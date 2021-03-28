@@ -6,5 +6,13 @@
     <fragment
         android:id="@+id/alarmListFragment"
         android:name="com.example.gamingwakeup.view.alarmlist.AlarmListFragment"
-        android:label="AlarmListFragment" />
+        android:label="AlarmListFragment" >
+        <action
+            android:id="@+id/action_alarmListFragment_to_alarmDetailEditFragment"
+            app:destination="@id/alarmDetailEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/alarmDetailEditFragment"
+        android:name="com.example.gamingwakeup.view.alarmdetailedit.AlarmDetailEditFragment"
+        android:label="AlarmDetailEditFragment" />
 </navigation>
