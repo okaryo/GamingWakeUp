@@ -24,6 +24,13 @@ class AlarmDetailEditFragment : Fragment() {
             ViewModelProvider(this, viewModelFactory).get(AlarmDetailEditViewModel::class.java)
         binding.viewmodel = viewModel
 
+        setTimePickerTo24HourView(binding)
+
         return binding.root
+    }
+
+    private fun setTimePickerTo24HourView(binding: FragmentAlarmDetailEditBinding) {
+        val timePicker = binding.alarmEditTimePicker
+        timePicker.setIs24HourView(true)
     }
 }
