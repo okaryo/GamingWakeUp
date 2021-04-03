@@ -10,12 +10,28 @@
             type="com.example.gamingwakeup.viewmodel.alarmlist.AlarmListViewModel" />
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_alarm_list"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:listData="@{viewmodel.alarmList}"
-        tools:cotext="com.example.gamingwakeup.view.MainActivity"
-        tools:listitem="@layout/view_alarm_list_item" />
+        android:layout_height="match_parent">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/alarmListRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:listData="@{viewmodel.alarmList}"
+            tools:cotext="com.example.gamingwakeup.view.MainActivity"
+            tools:listitem="@layout/view_alarm_list_item" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_create_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/create_alarm"
+            android:src="@drawable/ic_add" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

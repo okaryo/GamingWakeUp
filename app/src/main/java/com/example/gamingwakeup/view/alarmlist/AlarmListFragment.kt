@@ -4,50 +4,63 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import com.example.gamingwakeup.R
 import com.example.gamingwakeup.databinding.FragmentAlarmListBinding
-import com.example.gamingwakeup.model.Alarm
 import com.example.gamingwakeup.viewmodel.alarmlist.AlarmListViewModel
-import com.example.gamingwakeup.viewmodel.alarmlist.AlarmListViewModelFactory
 
 class AlarmListFragment : Fragment() {
-    private lateinit var viewModel: AlarmListViewModel
+    private lateinit var binding: FragmentAlarmListBinding
+
+    private val viewModel: AlarmListViewModel by lazy {
+        val activity = requireNotNull(this.activity)
+        AlarmListViewModel.Factory(activity.application)
+            .create(AlarmListViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentAlarmListBinding.inflate(layoutInflater)
-        val viewModelFactory = AlarmListViewModelFactory()
-        viewModel = ViewModelProvider(this, viewModelFactory).get(AlarmListViewModel::class.java)
+        binding = FragmentAlarmListBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
-        setAdapterToRecyclerView(binding.fragmentAlarmList)
-        setNavigationObserver(viewModel.navigateToAlarmDetailEdit)
+        setAdapterToRecyclerView()
+        setNavigationObserver()
+        setFloatingActionButton()
 
         return binding.root
     }
 
-    private fun setAdapterToRecyclerView(recyclerView: RecyclerView) {
-        recyclerView.adapter = AlarmListAdapter(AlarmListAdapter.OnClickListener {
-            viewModel.navigateToAlarmDetailEdit(it)
+    private fun setAdapterToRecyclerView() {
+        viewModel.alarmList.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                val recyclerView = binding.alarmListRecyclerView
+                recyclerView.adapter = AlarmListAdapter(AlarmListAdapter.OnClickListener {alarm ->
+                    viewModel.navigateToAlarmDetailEdit(alarm)
+                })
+            }
         })
     }
 
-    private fun setNavigationObserver(navigation: LiveData<Alarm>) {
-        navigation.observe(this, Observer {
+    private fun setNavigationObserver() {
+        val navigation = viewModel.navigateToAlarmDetailEdit
+        navigation.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 this.findNavController()
                     .navigate(AlarmListFragmentDirections.actionAlarmListFragmentToAlarmDetailEditFragment())
             }
         })
+    }
+
+    private fun setFloatingActionButton() {
+        val fab = binding.fabCreateAlarm
+        fab.setOnClickListener {
+            this.findNavController().navigate(
+                AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(null)
+            )
+        }
     }
 }
