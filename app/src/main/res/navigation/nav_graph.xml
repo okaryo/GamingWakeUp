@@ -1,18 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
     app:startDestination="@id/alarmListFragment">
 
     <fragment
         android:id="@+id/alarmListFragment"
         android:name="com.example.gamingwakeup.view.alarmlist.AlarmListFragment"
-        android:label="AlarmListFragment" >
+        android:label="AlarmListFragment">
         <action
             android:id="@+id/action_alarmListFragment_to_alarmDetailEditFragment"
             app:destination="@id/alarmDetailEditFragment" />
+        <action
+            android:id="@+id/action_alarmListFragment_to_addEditAlarmFragment"
+            app:destination="@id/addEditAlarmFragment" />
     </fragment>
     <fragment
         android:id="@+id/alarmDetailEditFragment"
         android:name="com.example.gamingwakeup.view.alarmdetailedit.AlarmDetailEditFragment"
         android:label="AlarmDetailEditFragment" />
+    <fragment
+        android:id="@+id/addEditAlarmFragment"
+        android:name="com.example.gamingwakeup.view.addeditalarm.AddEditAlarmFragment"
+        android:label="AddEditAlarmFragment">
+        <argument
+            android:name="alarmId"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_addEditAlarmFragment_to_alarmListFragment"
+            app:destination="@id/alarmListFragment" />
+    </fragment>
 </navigation>
