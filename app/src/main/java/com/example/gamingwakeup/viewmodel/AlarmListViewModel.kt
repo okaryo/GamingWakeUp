@@ -1,13 +1,11 @@
-package com.example.gamingwakeup.viewmodel.alarmlist
+package com.example.gamingwakeup.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.gamingwakeup.model.Alarm
 import com.example.gamingwakeup.model.AlarmList
 import com.example.gamingwakeup.repository.AlarmListRepository
-import com.example.gamingwakeup.repository.AlarmRepository
 import com.example.gamingwakeup.room.database.AlarmDatabase
-import com.example.gamingwakeup.viewmodel.AddEditAlarmViewModel
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -36,7 +34,9 @@ class AlarmListViewModel(private val repository: AlarmListRepository) : ViewMode
             if (modelClass.isAssignableFrom(AlarmListViewModel::class.java)) {
                 val database = AlarmDatabase.getInstance(application.applicationContext)
                 val repository = AlarmListRepository(database)
-                return AlarmListViewModel(repository) as T
+                return AlarmListViewModel(
+                    repository
+                ) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class!")
         }

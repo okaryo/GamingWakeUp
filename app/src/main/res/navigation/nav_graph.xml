@@ -9,16 +9,9 @@
         android:name="com.example.gamingwakeup.view.alarmlist.AlarmListFragment"
         android:label="AlarmListFragment">
         <action
-            android:id="@+id/action_alarmListFragment_to_alarmDetailEditFragment"
-            app:destination="@id/alarmDetailEditFragment" />
-        <action
             android:id="@+id/action_alarmListFragment_to_addEditAlarmFragment"
             app:destination="@id/addEditAlarmFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/alarmDetailEditFragment"
-        android:name="com.example.gamingwakeup.view.alarmdetailedit.AlarmDetailEditFragment"
-        android:label="AlarmDetailEditFragment" />
     <fragment
         android:id="@+id/addEditAlarmFragment"
         android:name="com.example.gamingwakeup.view.addeditalarm.AddEditAlarmFragment"

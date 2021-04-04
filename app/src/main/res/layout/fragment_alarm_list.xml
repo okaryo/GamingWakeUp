@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="viewmodel"
-            type="com.example.gamingwakeup.viewmodel.alarmlist.AlarmListViewModel" />
+            name="viewModel"
+            type="com.example.gamingwakeup.viewmodel.AlarmListViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:listData="@{viewmodel.alarmList}"
+            app:listData="@{viewModel.alarmList}"
             tools:cotext="com.example.gamingwakeup.view.MainActivity"
             tools:listitem="@layout/view_alarm_list_item" />
 
