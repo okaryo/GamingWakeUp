@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.gamingwakeup.databinding.FragmentAlarmListBinding
-import com.example.gamingwakeup.viewmodel.alarmlist.AlarmListViewModel
+import com.example.gamingwakeup.viewmodel.AlarmListViewModel
 
 class AlarmListFragment : Fragment() {
     private lateinit var binding: FragmentAlarmListBinding
@@ -26,7 +26,7 @@ class AlarmListFragment : Fragment() {
     ): View? {
         binding = FragmentAlarmListBinding.inflate(layoutInflater, container, false)
         binding.lifecycleOwner = this
-        binding.viewmodel = viewModel
+        binding.viewModel = viewModel
         setAdapterToRecyclerView()
         setNavigationObserver()
         setFloatingActionButton()
@@ -38,7 +38,7 @@ class AlarmListFragment : Fragment() {
         viewModel.alarmList.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 val recyclerView = binding.alarmListRecyclerView
-                recyclerView.adapter = AlarmListAdapter(AlarmListAdapter.OnClickListener {alarm ->
+                recyclerView.adapter = AlarmListAdapter(AlarmListAdapter.OnClickListener { alarm ->
                     viewModel.navigateToAlarmDetailEdit(alarm)
                 })
             }
@@ -50,7 +50,11 @@ class AlarmListFragment : Fragment() {
         navigation.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 this.findNavController()
-                    .navigate(AlarmListFragmentDirections.actionAlarmListFragmentToAlarmDetailEditFragment())
+                    .navigate(
+                        AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(
+                            it.id.toString()
+                        )
+                    )
             }
         })
     }
