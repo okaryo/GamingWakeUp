@@ -20,11 +20,7 @@ class AlarmListViewModel(private val repository: AlarmListRepository) : ViewMode
 
     init {
         viewModelScope.launch {
-
-            println("<<<<<<<<<<<")
-            println("get start")
             val alarmList = repository.getAlarmList()
-            println("getAlarmList!")
             _alarmList.value = alarmList
         }
     }
