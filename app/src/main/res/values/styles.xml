@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyToolBar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:elevation">5dp</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/primary_light</item>
+        <item name="colorControlNormal">@color/on_primary</item>
+        <item name="toolbarStyle">@style/MyToolBar</item>
+    </style>
+</resources>
