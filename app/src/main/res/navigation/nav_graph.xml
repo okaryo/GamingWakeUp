@@ -18,8 +18,7 @@
         android:label="AddEditAlarmFragment">
         <argument
             android:name="alarmId"
-            app:argType="string"
-            app:nullable="true" />
+            app:argType="integer" />
         <action
             android:id="@+id/action_addEditAlarmFragment_to_alarmListFragment"
             app:destination="@id/alarmListFragment" />
