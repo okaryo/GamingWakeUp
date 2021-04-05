@@ -9,26 +9,27 @@ import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class AddEditAlarmViewModel(private val repository: AlarmRepository) : ViewModel() {
-    private val _alarmId = MutableLiveData<String?>()
+    private val _alarmId = MutableLiveData<Int>()
     private val _hour = MutableLiveData<Int>()
     private val _minute = MutableLiveData<Int>()
     private val _soundVolume = MutableLiveData<Int>()
     private val _hasVibration = MutableLiveData(true)
     private var isNewAlarm = false
 
-    val alarmId: LiveData<String?>
-        get() = _alarmId
-    val hour: LiveData<Int>
-        get() = _hour
-    val minute: LiveData<Int>
-        get() = _minute
-    val soundVolume: LiveData<Int>
-        get() = _soundVolume
-    val hasVibration: LiveData<Boolean>
-        get() = _hasVibration
+//    val alarmId: LiveData<String?>
+//        get() = _alarmId
+//    val hour: LiveData<Int>
+//        get() = _hour
+//    val minute: LiveData<Int>
+//        get() = _minute
+//    val soundVolume: LiveData<Int>
+//        get() = _soundVolume
+//    val hasVibration: LiveData<Boolean>
+//        get() = _hasVibration
 
-    fun initialize(alarmId: String?) {
-        if (alarmId == null) {
+    fun initialize(alarmId: Int) {
+        _alarmId.value = alarmId
+        if (_alarmId.value == 0) {
             isNewAlarm = true
         }
         _hour.value = 10
@@ -55,6 +56,14 @@ class AddEditAlarmViewModel(private val repository: AlarmRepository) : ViewModel
                 isTurnedOn = true
             )
             createAlarm(alarm)
+        }
+    }
+
+    suspend fun deleteAlarm() {
+        val alarmId = _alarmId.value
+        if (alarmId != null && !isNewAlarm) {
+            val alarm = repository.getAlarm(alarmId)
+            repository.deleteAlarm(alarm)
         }
     }
 

@@ -14,19 +14,23 @@ class AlarmListViewModel(private val repository: AlarmListRepository) : ViewMode
     val alarmList: LiveData<AlarmList>
         get() = _alarmList
 
-    private val _navigateToAlarmDetailEdit = MutableLiveData<Alarm>()
-    val navigateToAlarmDetailEdit: LiveData<Alarm>
-        get() = _navigateToAlarmDetailEdit
+    private val _navigateToAddEditAlarmFragment = MutableLiveData<Alarm>()
+    val navigateToAddEditAlarmFragment: LiveData<Alarm>
+        get() = _navigateToAddEditAlarmFragment
 
     init {
         viewModelScope.launch {
+
+            println("<<<<<<<<<<<")
+            println("get start")
             val alarmList = repository.getAlarmList()
+            println("getAlarmList!")
             _alarmList.value = alarmList
         }
     }
 
-    fun navigateToAlarmDetailEdit(alarm: Alarm) {
-        _navigateToAlarmDetailEdit.value = alarm
+    fun navigateToAddEditAlarmFragment(alarm: Alarm) {
+        _navigateToAddEditAlarmFragment.value = alarm
     }
 
     class Factory(private val application: Application) : ViewModelProvider.Factory {
