@@ -39,21 +39,19 @@ class AlarmListFragment : Fragment() {
             if (it != null) {
                 val recyclerView = binding.alarmListRecyclerView
                 recyclerView.adapter = AlarmListAdapter(AlarmListAdapter.OnClickListener { alarm ->
-                    viewModel.navigateToAlarmDetailEdit(alarm)
+                    viewModel.navigateToAddEditAlarmFragment(alarm)
                 })
             }
         })
     }
 
     private fun setNavigationObserver() {
-        val navigation = viewModel.navigateToAlarmDetailEdit
+        val navigation = viewModel.navigateToAddEditAlarmFragment
         navigation.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 this.findNavController()
                     .navigate(
-                        AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(
-                            it.id.toString()
-                        )
+                        AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(it.id)
                     )
             }
         })
@@ -63,7 +61,7 @@ class AlarmListFragment : Fragment() {
         val fab = binding.fabCreateAlarm
         fab.setOnClickListener {
             this.findNavController().navigate(
-                AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(null)
+                AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(0)
             )
         }
     }
