@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -32,6 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:hour="@={viewModel.hour}"
+            android:minute="@={viewModel.minute}"
             android:timePickerMode="spinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -71,6 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:progress="@={viewModel.soundVolume}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="3"
@@ -97,18 +99,19 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:text="@string/form_vibration_label"
-            app:layout_constraintEnd_toStartOf="@+id/switch2"
+            app:layout_constraintEnd_toStartOf="@+id/vibration_switch"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/alarm_edit_sound_volume_label" />
 
         <Switch
-            android:id="@+id/switch2"
+            android:id="@+id/vibration_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:checked="@{viewModel.hasVibration}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/textView3"
@@ -123,7 +126,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch2" />
+            app:layout_constraintTop_toBottomOf="@+id/vibration_switch" />
 
         <Button
             android:id="@+id/add_edit_button"
