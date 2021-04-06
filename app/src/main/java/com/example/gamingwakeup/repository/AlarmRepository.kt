@@ -8,9 +8,7 @@ class AlarmRepository(private val database: AlarmDatabase) {
 
     suspend fun createAlarm(alarm: Alarm) = database.alarmDao().insert(alarm)
 
-    fun updateAlarm(alarm: Alarm) {
-        // TODO: 別イシューで
-    }
+    suspend fun updateAlarm(alarm: Alarm) = database.alarmDao().update(alarm)
 
     suspend fun deleteAlarm(alarm: Alarm) = database.alarmDao().delete(alarm)
 }

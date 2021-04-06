@@ -2,10 +2,8 @@ package com.example.gamingwakeup.view.addeditalarm
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.gamingwakeup.R
@@ -13,7 +11,6 @@ import com.example.gamingwakeup.databinding.FragmentAddEditAlarmBinding
 import com.example.gamingwakeup.viewmodel.AddEditAlarmViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.lang.Exception
 
 class AddEditAlarmFragment : Fragment() {
@@ -22,8 +19,7 @@ class AddEditAlarmFragment : Fragment() {
 
     private val viewModel: AddEditAlarmViewModel by lazy {
         val activity = requireNotNull(this.activity)
-        AddEditAlarmViewModel.Factory(activity.application)
-            .create(AddEditAlarmViewModel::class.java)
+        AddEditAlarmViewModel.create(activity.application)
     }
 
     override fun onCreateView(
@@ -31,25 +27,33 @@ class AddEditAlarmFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAddEditAlarmBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
-        arguments = AddEditAlarmFragmentArgs.fromBundle(requireArguments())
-        viewModel.initialize(arguments.alarmId)
-
-        setTimePickerTo24HourView()
-        setClickButtonListener()
-        setToolbar()
+        setupBinding(inflater, container)
+        setupViewModel()
+        setupTimePickerTo24HourView()
+        setupClickButtonListener()
+        setupToolbar()
+        setupListener()
 
         return binding.root
     }
 
-    private fun setTimePickerTo24HourView() {
+    private fun setupBinding(inflater: LayoutInflater, container: ViewGroup?) {
+        binding = FragmentAddEditAlarmBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+    }
+
+    private fun setupViewModel() {
+        arguments = AddEditAlarmFragmentArgs.fromBundle(requireArguments())
+        viewModel.initialize(arguments.alarmId)
+    }
+
+    private fun setupTimePickerTo24HourView() {
         val timePicker = binding.alarmEditTimePicker
         timePicker.setIs24HourView(true)
     }
 
-    private fun setClickButtonListener() {
+    private fun setupClickButtonListener() {
         val button = binding.addEditButton
         button.setOnClickListener {
             try {
@@ -63,7 +67,7 @@ class AddEditAlarmFragment : Fragment() {
         }
     }
 
-    private fun setToolbar() {
+    private fun setupToolbar() {
         val navigation = this.findNavController()
         binding.toolbar.apply {
             title = if (arguments.alarmId == 0) getString(R.string.toolbar_title_create_alarm)
@@ -91,6 +95,13 @@ class AddEditAlarmFragment : Fragment() {
                     true
                 }
             }
+        }
+    }
+
+    private fun setupListener() {
+        val vibrationSwitch = binding.vibrationSwitch
+        vibrationSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.onVibrationValueChanged(isChecked)
         }
     }
 }
