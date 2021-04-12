@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gamingwakeup.databinding.ViewAlarmListItemBinding
-import com.example.gamingwakeup.model.Alarm
+import com.example.gamingwakeup.model.model.Alarm
 
 class AlarmListAdapter(private val onClickListener: OnClickListener) :
     ListAdapter<Alarm, AlarmListAdapter.ViewHolder>(
