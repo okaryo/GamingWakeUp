@@ -1,4 +1,4 @@
-package com.example.gamingwakeup.view
+package com.example.gamingwakeup.view.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

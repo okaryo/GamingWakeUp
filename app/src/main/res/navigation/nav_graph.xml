@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/alarmListFragment"
-        android:name="com.example.gamingwakeup.view.alarmlist.AlarmListFragment"
+        android:name="com.example.gamingwakeup.view.fragment.AlarmListFragment"
         android:label="AlarmListFragment">
         <action
             android:id="@+id/action_alarmListFragment_to_addEditAlarmFragment"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/addEditAlarmFragment"
-        android:name="com.example.gamingwakeup.view.addeditalarm.AddEditAlarmFragment"
+        android:name="com.example.gamingwakeup.view.fragment.AddEditAlarmFragment"
         android:label="AddEditAlarmFragment">
         <argument
             android:name="alarmId"
