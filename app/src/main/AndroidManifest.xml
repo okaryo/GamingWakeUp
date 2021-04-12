@@ -22,13 +22,13 @@
 
         <activity android:name=".view.activity.AlarmActivity" />
 
-        <receiver android:name=".viewmodel.AlarmReceiver">
+        <receiver android:name=".model.model.Alarm$AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".viewmodel.AlarmService" />
+        <service android:name=".model.model.Alarm$AlarmService" />
     </application>
 
 </manifest>

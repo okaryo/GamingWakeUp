@@ -2,10 +2,10 @@ package com.example.gamingwakeup.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.example.gamingwakeup.model.Alarm
-import com.example.gamingwakeup.model.AlarmList
-import com.example.gamingwakeup.repository.AlarmListRepository
-import com.example.gamingwakeup.database.AlarmDatabase
+import com.example.gamingwakeup.model.model.Alarm
+import com.example.gamingwakeup.model.model.AlarmList
+import com.example.gamingwakeup.model.data.repository.AlarmListRepository
+import com.example.gamingwakeup.model.data.database.AlarmDatabase
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
