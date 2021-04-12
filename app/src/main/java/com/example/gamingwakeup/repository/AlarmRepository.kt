@@ -1,7 +1,7 @@
 package com.example.gamingwakeup.repository
 
 import com.example.gamingwakeup.model.Alarm
-import com.example.gamingwakeup.room.database.AlarmDatabase
+import com.example.gamingwakeup.database.AlarmDatabase
 
 class AlarmRepository(private val database: AlarmDatabase) {
     suspend fun getAlarm(alarmId: Int) = database.alarmDao().getAlarm(alarmId)

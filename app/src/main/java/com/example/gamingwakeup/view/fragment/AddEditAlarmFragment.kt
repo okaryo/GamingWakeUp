@@ -1,4 +1,4 @@
-package com.example.gamingwakeup.view.addeditalarm
+package com.example.gamingwakeup.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -44,7 +44,10 @@ class AddEditAlarmFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        arguments = AddEditAlarmFragmentArgs.fromBundle(requireArguments())
+        arguments =
+            AddEditAlarmFragmentArgs.fromBundle(
+                requireArguments()
+            )
         viewModel.initialize(arguments.alarmId)
     }
 

@@ -1,24 +1,24 @@
-package com.example.gamingwakeup.view.alarmlist
+package com.example.gamingwakeup.view.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gamingwakeup.R
-import com.example.gamingwakeup.databinding.FragmentAlarmListBinding
 import com.example.gamingwakeup.databinding.ViewAlarmListItemBinding
 import com.example.gamingwakeup.model.Alarm
 
 class AlarmListAdapter(private val onClickListener: OnClickListener) :
-    ListAdapter<Alarm, AlarmListAdapter.ViewHolder>(DiffCallback) {
+    ListAdapter<Alarm, AlarmListAdapter.ViewHolder>(
+        DiffCallback
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             ViewAlarmListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(
+            binding
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

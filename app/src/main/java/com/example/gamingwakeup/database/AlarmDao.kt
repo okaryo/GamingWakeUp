@@ -1,4 +1,4 @@
-package com.example.gamingwakeup.room.dao
+package com.example.gamingwakeup.database
 
 import androidx.room.*
 import com.example.gamingwakeup.model.Alarm

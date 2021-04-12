@@ -1,4 +1,4 @@
-package com.example.gamingwakeup.view
+package com.example.gamingwakeup.view.activity
 
 import android.app.Activity
 import android.content.Context
@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import com.example.gamingwakeup.R
 import com.example.gamingwakeup.databinding.ActivityAlarmBinding
