@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.activity.AlarmActivity" />
+        <activity android:name=".view.activity.GamingAlarmActivity" />
 
         <receiver android:name=".model.model.Alarm$AlarmReceiver">
             <intent-filter>
