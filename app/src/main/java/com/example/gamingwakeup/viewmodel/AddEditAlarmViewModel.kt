@@ -1,21 +1,13 @@
 package com.example.gamingwakeup.viewmodel
 
-import android.app.AlarmManager
 import android.app.Application
-import android.app.PendingIntent
-import android.app.Service
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.os.IBinder
-import android.util.Log
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.lifecycle.*
 import com.example.gamingwakeup.model.model.Alarm
 import com.example.gamingwakeup.model.data.repository.AlarmRepository
 import com.example.gamingwakeup.model.data.database.AlarmDatabase
-import com.example.gamingwakeup.view.activity.AlarmActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
