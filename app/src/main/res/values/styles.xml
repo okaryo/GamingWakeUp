@@ -12,4 +12,12 @@
         <item name="colorControlNormal">@color/on_primary</item>
         <item name="toolbarStyle">@style/MyToolBar</item>
     </style>
+
+    <style name="NumberButton">
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:background">@drawable/style_number_display_frame_border</item>
+        <item name="layout_gravity">fill</item>
+        <item name="layout_columnWeight">1</item>
+        <item name="layout_rowWeight">1</item>
+    </style>
 </resources>

@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.example.gamingwakeup.model.data.repository.AlarmRepository
-import com.example.gamingwakeup.view.activity.AlarmActivity
+import com.example.gamingwakeup.view.activity.GamingAlarmActivity
 import java.util.*
 
 data class Alarm(
@@ -94,7 +94,7 @@ data class Alarm(
         override fun onStart(intent: Intent, startId: Int) {
             Log.d("Service", "onStart!")
             val alarmIntent =
-                Intent(this, AlarmActivity::class.java).apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
+                Intent(this, GamingAlarmActivity::class.java).apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
             startActivity(alarmIntent)
             val pendingIntent = PendingIntent.getActivity(this, 0, alarmIntent, 0)
 
