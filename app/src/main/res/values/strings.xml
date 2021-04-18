@@ -8,4 +8,14 @@
     <string name="delete_alarm">Delete Alarm</string>
     <string name="toolbar_title_edit_alarm">Edit Alarm</string>
     <string name="toolbar_title_create_alarm">Create Alarm</string>
+    <string name="game_description_number_in_order">Tap the numbers in order!</string>
+    <string name="game_number_in_order_button_number_9">9</string>
+    <string name="game_number_in_order_button_number_8">8</string>
+    <string name="game_number_in_order_button_number_7">7</string>
+    <string name="game_number_in_order_button_number_6">6</string>
+    <string name="game_number_in_order_button_number_5">5</string>
+    <string name="game_number_in_order_button_number_4">4</string>
+    <string name="game_number_in_order_button_number_3">3</string>
+    <string name="game_number_in_order_button_number_2">2</string>
+    <string name="game_number_in_order_button_number_1">1</string>
 </resources>
