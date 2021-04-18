@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.gamingwakeup.model.model.GamingAlarmBase
 import java.lang.IllegalArgumentException
+import java.util.*
 
 class GamingAlarmNumberInOrderViewModel: ViewModel(), GamingAlarmBaseViewModel {
     private val _isComplete = MutableLiveData(false)
@@ -14,6 +15,7 @@ class GamingAlarmNumberInOrderViewModel: ViewModel(), GamingAlarmBaseViewModel {
     private val _isFailure = MutableLiveData(false)
     override val isFailure: LiveData<Boolean>
         get() = _isFailure
+    val currentTime = Calendar()
 
     private val tappedNumber = mutableListOf<Int>()
 
