@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.gamingwakeup.R
 import com.example.gamingwakeup.databinding.FragmentAddEditAlarmBinding
@@ -33,6 +34,7 @@ class AddEditAlarmFragment : Fragment() {
         setupClickButtonListener()
         setupToolbar()
         setupListener()
+        setupNavigationObserver()
 
         return binding.root
     }
@@ -60,9 +62,7 @@ class AddEditAlarmFragment : Fragment() {
         val button = binding.addEditButton
         button.setOnClickListener {
             try {
-                viewModel.saveAlarm()
-                this.findNavController()
-                    .navigate(AddEditAlarmFragmentDirections.actionAddEditAlarmFragmentToAlarmListFragment())
+                viewModel.saveAndScheduleAlarm()
             } catch (e: Exception) {
                 // TODO: いつか良い感じにハンドリングする！
                 println("Failed to create or update alarm...")
@@ -85,15 +85,7 @@ class AddEditAlarmFragment : Fragment() {
                 inflateMenu(R.menu.menu_delete_alarm)
                 setOnMenuItemClickListener {
                     when (it.itemId) {
-                        R.id.menu_item_delete_alarm -> {
-                            GlobalScope.launch {
-                                launch { viewModel.deleteAlarm() }.join()
-                                findNavController().navigate(
-                                    AddEditAlarmFragmentDirections.actionAddEditAlarmFragmentToAlarmListFragment()
-                                )
-                            }
-
-                        }
+                        R.id.menu_item_delete_alarm -> viewModel.deleteAlarm()
                     }
                     true
                 }
@@ -106,5 +98,15 @@ class AddEditAlarmFragment : Fragment() {
         vibrationSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.onVibrationValueChanged(isChecked)
         }
+    }
+
+    private fun setupNavigationObserver() {
+        viewModel.navigateToAlarmListFragment.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                findNavController().navigate(
+                    AddEditAlarmFragmentDirections.actionAddEditAlarmFragmentToAlarmListFragment()
+                )
+            }
+        })
     }
 }

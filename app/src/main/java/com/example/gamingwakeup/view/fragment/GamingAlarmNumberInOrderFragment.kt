@@ -8,7 +8,9 @@ import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.gridlayout.widget.GridLayout
 import androidx.lifecycle.Observer
 import com.example.gamingwakeup.R
 import com.example.gamingwakeup.databinding.FragmentGamingAlarmNumberInOrderBinding
@@ -80,6 +82,18 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
             binding.gameNumberInOrderButton8,
             binding.gameNumberInOrderButton9
         )
+        setupNumberButtonText(numberButtons)
+        setupNumberButtonListener(numberButtons)
+    }
+
+    private fun setupNumberButtonText(numberButtons: List<Button>) {
+        var numbers = (1..9).shuffled()
+        for ((index, button) in numberButtons.withIndex()) {
+            button.text = numbers[index].toString()
+        }
+    }
+
+    private fun setupNumberButtonListener(numberButtons: List<Button>) {
         for (button in numberButtons) {
             button.setOnClickListener {
                 val number = Integer.parseInt(button.text.toString())
