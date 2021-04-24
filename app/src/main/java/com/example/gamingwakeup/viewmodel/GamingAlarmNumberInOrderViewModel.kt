@@ -15,7 +15,6 @@ class GamingAlarmNumberInOrderViewModel: ViewModel(), GamingAlarmBaseViewModel {
     private val _isFailure = MutableLiveData(false)
     override val isFailure: LiveData<Boolean>
         get() = _isFailure
-    val currentTime = Calendar()
 
     private val tappedNumber = mutableListOf<Int>()
 
