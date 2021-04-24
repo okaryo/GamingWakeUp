@@ -25,19 +25,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="1"
             app:title="@string/app_name" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/alarmListRecyclerView"
@@ -45,7 +41,6 @@
                 android:layout_height="0dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/toolbar"
-                app:layout_constraintVertical_weight="2"
                 tools:cotext="com.example.gamingwakeup.view.activity.MainActivity"
                 tools:layout_editor_absoluteX="-36dp"
                 tools:listitem="@layout/view_alarm_list_item" />

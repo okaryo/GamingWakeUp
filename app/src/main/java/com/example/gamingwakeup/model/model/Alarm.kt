@@ -43,6 +43,12 @@ data class Alarm(
         )
     }
 
+    fun clockTimeStringFormat(): String {
+        val hour = this.hour.toString().padStart(2, '0')
+        val minute = this.minute.toString().padStart(2, '0')
+        return "$hour:$minute"
+    }
+
     suspend fun create(repository: AlarmRepository) {
         repository.createAlarm(this)
     }
@@ -94,7 +100,9 @@ data class Alarm(
         override fun onStart(intent: Intent, startId: Int) {
             Log.d("Service", "onStart!")
             val alarmIntent =
-                Intent(this, GamingAlarmActivity::class.java).apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
+                Intent(this, GamingAlarmActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
             startActivity(alarmIntent)
             val pendingIntent = PendingIntent.getActivity(this, 0, alarmIntent, 0)
 

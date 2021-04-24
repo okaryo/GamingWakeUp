@@ -46,10 +46,7 @@ class AddEditAlarmFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        arguments =
-            AddEditAlarmFragmentArgs.fromBundle(
-                requireArguments()
-            )
+        arguments = AddEditAlarmFragmentArgs.fromBundle(requireArguments())
         viewModel.initialize(arguments.alarmId)
     }
 
@@ -61,12 +58,7 @@ class AddEditAlarmFragment : Fragment() {
     private fun setupClickButtonListener() {
         val button = binding.addEditButton
         button.setOnClickListener {
-            try {
-                viewModel.saveAndScheduleAlarm()
-            } catch (e: Exception) {
-                // TODO: いつか良い感じにハンドリングする！
-                println("Failed to create or update alarm...")
-            }
+            viewModel.saveAndScheduleAlarm()
         }
     }
 
@@ -79,7 +71,11 @@ class AddEditAlarmFragment : Fragment() {
             setNavigationIcon(R.drawable.ic_arrow_back)
             setNavigationOnClickListener {
                 navigation
-                    .navigate(AddEditAlarmFragmentDirections.actionAddEditAlarmFragmentToAlarmListFragment())
+                    .navigate(
+                        AddEditAlarmFragmentDirections.actionAddEditAlarmFragmentToAlarmListFragment(
+                            viewModel.toastMessageForAlarmListFragment
+                        )
+                    )
             }
             if (arguments.alarmId != 0) {
                 inflateMenu(R.menu.menu_delete_alarm)
@@ -104,7 +100,9 @@ class AddEditAlarmFragment : Fragment() {
         viewModel.navigateToAlarmListFragment.observe(viewLifecycleOwner, Observer {
             if (it) {
                 findNavController().navigate(
-                    AddEditAlarmFragmentDirections.actionAddEditAlarmFragmentToAlarmListFragment()
+                    AddEditAlarmFragmentDirections.actionAddEditAlarmFragmentToAlarmListFragment(
+                        viewModel.toastMessageForAlarmListFragment
+                    )
                 )
             }
         })
