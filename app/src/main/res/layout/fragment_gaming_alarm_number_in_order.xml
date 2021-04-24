@@ -60,67 +60,49 @@
             app:rowCount="3">
 
             <Button
-                style="@style/NumberButton"
                 android:id="@+id/gameNumberInOrderButton1"
-                android:text="@string/game_number_in_order_button_number_1"
-                app:layout_column="0"
-                app:layout_row="0" />
+                style="@style/NumberButton"
+                tools:text="@string/game_number_in_order_button_number_1" />
 
             <Button
-                style="@style/NumberButton"
                 android:id="@+id/gameNumberInOrderButton2"
-                android:text="@string/game_number_in_order_button_number_2"
-                app:layout_column="1"
-                app:layout_row="0" />
+                style="@style/NumberButton"
+                tools:text="@string/game_number_in_order_button_number_2" />
 
             <Button
-                style="@style/NumberButton"
                 android:id="@+id/gameNumberInOrderButton3"
-                android:text="@string/game_number_in_order_button_number_3"
-                app:layout_column="2"
-                app:layout_row="0" />
+                style="@style/NumberButton"
+                tools:text="@string/game_number_in_order_button_number_3" />
 
             <Button
-                style="@style/NumberButton"
                 android:id="@+id/gameNumberInOrderButton4"
-                android:text="@string/game_number_in_order_button_number_4"
-                app:layout_column="0"
-                app:layout_row="1" />
+                style="@style/NumberButton"
+                tools:text="@string/game_number_in_order_button_number_4" />
 
             <Button
-                style="@style/NumberButton"
                 android:id="@+id/gameNumberInOrderButton5"
-                android:text="@string/game_number_in_order_button_number_5"
-                app:layout_column="1"
-                app:layout_row="1" />
+                style="@style/NumberButton"
+                tools:text="@string/game_number_in_order_button_number_5" />
 
             <Button
-                style="@style/NumberButton"
                 android:id="@+id/gameNumberInOrderButton6"
-                android:text="@string/game_number_in_order_button_number_6"
-                app:layout_column="2"
-                app:layout_row="1" />
+                style="@style/NumberButton"
+                tools:text="@string/game_number_in_order_button_number_6" />
 
             <Button
-                style="@style/NumberButton"
                 android:id="@+id/gameNumberInOrderButton7"
-                android:text="@string/game_number_in_order_button_number_7"
-                app:layout_column="0"
-                app:layout_row="2" />
+                style="@style/NumberButton"
+                tools:text="@string/game_number_in_order_button_number_7" />
 
             <Button
-                style="@style/NumberButton"
                 android:id="@+id/gameNumberInOrderButton8"
-                android:text="@string/game_number_in_order_button_number_8"
-                app:layout_column="1"
-                app:layout_row="2" />
+                style="@style/NumberButton"
+                tools:text="@string/game_number_in_order_button_number_8" />
 
             <Button
-                style="@style/NumberButton"
                 android:id="@+id/gameNumberInOrderButton9"
-                android:text="@string/game_number_in_order_button_number_9"
-                app:layout_column="2"
-                app:layout_row="2" />
+                style="@style/NumberButton"
+                tools:text="@string/game_number_in_order_button_number_9" />
         </androidx.gridlayout.widget.GridLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
