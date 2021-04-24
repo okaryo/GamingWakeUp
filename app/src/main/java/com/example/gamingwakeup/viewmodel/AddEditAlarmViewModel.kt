@@ -20,16 +20,20 @@ class AddEditAlarmViewModel(
 ) : BaseObservable() {
     @Bindable
     var soundVolume: Int = 50
+
     @Bindable
     var hour = calender.get(Calendar.HOUR_OF_DAY)
+
     @Bindable
     var minute = calender.get(Calendar.MINUTE)
+    val hasVibration: LiveData<Boolean>
+        get() = _hasVibration
+    val navigateToAlarmListFragment: LiveData<Boolean>
+        get() = _navigateToAlarmListFragment
     private var _alarmId = 0
     private val _hasVibration = MutableLiveData(true)
     private var isNewAlarm = false
-
-    val hasVibration: LiveData<Boolean>
-        get() = _hasVibration
+    private val _navigateToAlarmListFragment = MutableLiveData(false)
 
     fun initialize(alarmId: Int) {
         _alarmId = alarmId
@@ -50,7 +54,7 @@ class AddEditAlarmViewModel(
         _hasVibration.value = isChecked
     }
 
-    fun saveAlarm() {
+    fun saveAndScheduleAlarm() {
         val currentHasVibration = _hasVibration.value ?: return
         val alarm = Alarm(
             id = _alarmId,
@@ -60,19 +64,25 @@ class AddEditAlarmViewModel(
             hasVibration = currentHasVibration,
             isTurnedOn = true
         )
-        if (isNewAlarm) {
-            createAlarm(alarm)
-        } else {
-            updateAlarm(alarm)
+        runBlocking {
+            if (isNewAlarm) {
+                createAlarm(alarm)
+            } else {
+                updateAlarm(alarm)
+            }
+            scheduleAlarm(alarm)
         }
-        scheduleAlarm(alarm)
+        _navigateToAlarmListFragment.value = true
     }
 
-    suspend fun deleteAlarm() {
-        if (!isNewAlarm) {
-            val alarm = Alarm.find(_alarmId, repository)
-            alarm.delete(repository)
+    fun deleteAlarm() {
+        runBlocking {
+            if (!isNewAlarm) {
+                val alarm = Alarm.find(_alarmId, repository)
+                alarm.delete(repository)
+            }
         }
+        _navigateToAlarmListFragment.value = true
     }
 
     private fun createAlarm(alarm: Alarm) = GlobalScope.launch { alarm.create(repository) }
