@@ -8,6 +8,10 @@
         android:id="@+id/alarmListFragment"
         android:name="com.example.gamingwakeup.view.fragment.AlarmListFragment"
         android:label="AlarmListFragment">
+        <argument
+            android:name="toastMessage"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_alarmListFragment_to_addEditAlarmFragment"
             app:destination="@id/addEditAlarmFragment" />

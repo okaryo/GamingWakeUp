@@ -11,6 +11,7 @@ import com.example.gamingwakeup.model.data.database.AlarmDatabase
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.lang.Exception
 import java.util.*
 
 class AddEditAlarmViewModel(
@@ -30,10 +31,13 @@ class AddEditAlarmViewModel(
         get() = _hasVibration
     val navigateToAlarmListFragment: LiveData<Boolean>
         get() = _navigateToAlarmListFragment
+    val toastMessageForAlarmListFragment: String
+        get() = _toastMessageForAlarmListFragment
     private var _alarmId = 0
     private val _hasVibration = MutableLiveData(true)
     private var isNewAlarm = false
     private val _navigateToAlarmListFragment = MutableLiveData(false)
+    private var _toastMessageForAlarmListFragment = ""
 
     fun initialize(alarmId: Int) {
         _alarmId = alarmId
@@ -55,34 +59,42 @@ class AddEditAlarmViewModel(
     }
 
     fun saveAndScheduleAlarm() {
-        val currentHasVibration = _hasVibration.value ?: return
-        val alarm = Alarm(
-            id = _alarmId,
-            hour = hour,
-            minute = minute,
-            soundVolume = soundVolume,
-            hasVibration = currentHasVibration,
-            isTurnedOn = true
-        )
-        runBlocking {
-            if (isNewAlarm) {
-                createAlarm(alarm)
-            } else {
-                updateAlarm(alarm)
+        try {
+            val currentHasVibration = _hasVibration.value ?: return
+            val alarm = Alarm(
+                id = _alarmId,
+                hour = hour,
+                minute = minute,
+                soundVolume = soundVolume,
+                hasVibration = currentHasVibration,
+                isTurnedOn = true
+            )
+            runBlocking {
+                if (isNewAlarm) {
+                    createAlarm(alarm)
+                } else {
+                    updateAlarm(alarm)
+                }
+                scheduleAlarm(alarm)
             }
-            scheduleAlarm(alarm)
+            navigateBackToAlarmListFragment("Alarm set to ${alarm.clockTimeStringFormat()}")
+        } catch (e: Exception) {
+            navigateBackToAlarmListFragment("Failed to set alarm.")
         }
-        _navigateToAlarmListFragment.value = true
     }
 
     fun deleteAlarm() {
-        runBlocking {
-            if (!isNewAlarm) {
-                val alarm = Alarm.find(_alarmId, repository)
-                alarm.delete(repository)
+        try {
+            runBlocking {
+                if (!isNewAlarm) {
+                    val alarm = Alarm.find(_alarmId, repository)
+                    alarm.delete(repository)
+                }
             }
+            navigateBackToAlarmListFragment("Alarm removed.")
+        } catch (e: Exception) {
+            navigateBackToAlarmListFragment("Failed to delete alarm.")
         }
-        _navigateToAlarmListFragment.value = true
     }
 
     private fun createAlarm(alarm: Alarm) = GlobalScope.launch { alarm.create(repository) }
@@ -91,6 +103,11 @@ class AddEditAlarmViewModel(
 
     private fun scheduleAlarm(alarm: Alarm) {
         alarm.schedule(applicationContext)
+    }
+
+    private fun navigateBackToAlarmListFragment(toastMessage: String) {
+        _toastMessageForAlarmListFragment = toastMessage
+        _navigateToAlarmListFragment.value = true
     }
 
     companion object {
