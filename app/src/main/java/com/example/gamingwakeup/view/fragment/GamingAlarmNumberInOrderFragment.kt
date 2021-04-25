@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.gridlayout.widget.GridLayout
 import androidx.lifecycle.Observer
 import com.example.gamingwakeup.R
 import com.example.gamingwakeup.databinding.FragmentGamingAlarmNumberInOrderBinding
@@ -44,11 +43,15 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
         return binding.root
     }
 
+    override fun onDestroy() {
+        activity?.finishAndRemoveTask()
+        super.onDestroy()
+    }
+
     override fun observeOnGameCompleted() {
-        viewModel.isComplete.observe(viewLifecycleOwner, Observer { isComplete ->
-            if (isComplete) {
+        viewModel.isComplete.observe(viewLifecycleOwner, Observer { isCompleted ->
+            if (isCompleted) {
                 stopAlarmAndVibration()
-                // TODO: ゲームクリアしたらアクティビティを破棄したい。
                 this.onDestroy()
             }
         })
@@ -87,7 +90,7 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
     }
 
     private fun setupNumberButtonText(numberButtons: List<Button>) {
-        var numbers = (1..9).shuffled()
+        val numbers = (1..9).shuffled()
         for ((index, button) in numberButtons.withIndex()) {
             button.text = numbers[index].toString()
         }
