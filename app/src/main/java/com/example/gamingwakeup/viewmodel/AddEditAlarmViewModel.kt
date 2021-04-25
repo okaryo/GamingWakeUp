@@ -4,14 +4,17 @@ import android.app.Application
 import android.content.Context
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
-import androidx.lifecycle.*
-import com.example.gamingwakeup.model.model.Alarm
-import com.example.gamingwakeup.model.data.repository.AlarmRepository
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.gamingwakeup.model.data.database.AlarmDatabase
+import com.example.gamingwakeup.model.data.repository.AlarmRepository
+import com.example.gamingwakeup.model.model.Alarm
+import com.example.gamingwakeup.model.model.SoundSetting
+import com.example.gamingwakeup.model.model.VibrationSetting
+import com.example.gamingwakeup.model.model.WeeklyRecurringSetting
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.lang.Exception
 import java.util.*
 
 class AddEditAlarmViewModel(
@@ -21,10 +24,8 @@ class AddEditAlarmViewModel(
 ) : BaseObservable() {
     @Bindable
     var soundVolume: Int = 50
-
     @Bindable
     var hour = calender.get(Calendar.HOUR_OF_DAY)
-
     @Bindable
     var minute = calender.get(Calendar.MINUTE)
     val hasVibration: LiveData<Boolean>
@@ -49,8 +50,8 @@ class AddEditAlarmViewModel(
             }
             hour = alarm.hour
             minute = alarm.minute
-            soundVolume = alarm.soundVolume
-            _hasVibration.value = alarm.hasVibration
+            soundVolume = alarm.sound.volume
+            _hasVibration.value = alarm.vibration.active
         }
     }
 
@@ -65,9 +66,18 @@ class AddEditAlarmViewModel(
                 id = _alarmId,
                 hour = hour,
                 minute = minute,
-                soundVolume = soundVolume,
-                hasVibration = currentHasVibration,
-                isTurnedOn = true
+                sound = SoundSetting(name = "name", volume = soundVolume),
+                vibration = VibrationSetting(active = currentHasVibration),
+                weeklyRecurring = WeeklyRecurringSetting(
+                    monday = true,
+                    tuesday = true,
+                    wednesday = true,
+                    thursday = true,
+                    friday = true,
+                    saturday = true,
+                    sunday = true
+                ),
+                active = true
             )
             runBlocking {
                 if (isNewAlarm) {

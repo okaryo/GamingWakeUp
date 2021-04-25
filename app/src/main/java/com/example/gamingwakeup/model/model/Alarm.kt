@@ -16,9 +16,10 @@ data class Alarm(
     val id: Int,
     val hour: Int,
     val minute: Int,
-    val soundVolume: Int,
-    val hasVibration: Boolean = true,
-    val isTurnedOn: Boolean = false
+    val sound: SoundSetting,
+    val vibration: VibrationSetting,
+    val weeklyRecurring: WeeklyRecurringSetting,
+    val active: Boolean
 ) {
     fun schedule(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

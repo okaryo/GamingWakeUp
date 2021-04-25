@@ -5,25 +5,42 @@ import com.example.gamingwakeup.model.model.Alarm
 
 class AlarmMapper {
     companion object {
-        fun transformToModel(alarmEntity: AlarmEntity): Alarm {
+        fun transform(entity: AlarmEntity): Alarm {
             return Alarm(
-                id = alarmEntity.id,
-                hour = alarmEntity.hour,
-                minute = alarmEntity.minute,
-                soundVolume = alarmEntity.soundVolume,
-                hasVibration = alarmEntity.hasVibration,
-                isTurnedOn = alarmEntity.isTurnedOn
+                id = entity.id,
+                hour = entity.hour,
+                minute = entity.minute,
+                sound = SoundSettingMapper.transform(entity.soundName, entity.soundVolume),
+                vibration = VibrationSettingMapper.transform(entity.vibrationActive),
+                weeklyRecurring = WeeklyRecurringSettingMapper.transform(
+                    entity.weeklyRecurringMonday,
+                    entity.weeklyRecurringTuesday,
+                    entity.weeklyRecurringWednesday,
+                    entity.weeklyRecurringThursday,
+                    entity.weeklyRecurringFriday,
+                    entity.weeklyRecurringSaturday,
+                    entity.weeklyRecurringSunday
+                ),
+                active = entity.active
             )
         }
 
-        fun transformToEntity(alarm: Alarm): AlarmEntity {
+        fun transform(model: Alarm): AlarmEntity {
             return AlarmEntity(
-                id = alarm.id,
-                hour = alarm.hour,
-                minute = alarm.minute,
-                soundVolume = alarm.soundVolume,
-                hasVibration = alarm.hasVibration,
-                isTurnedOn = alarm.isTurnedOn
+                id = model.id,
+                hour = model.hour,
+                minute = model.minute,
+                soundName = model.sound.name,
+                soundVolume = model.sound.volume,
+                vibrationActive = model.vibration.active,
+                weeklyRecurringMonday = model.weeklyRecurring.monday,
+                weeklyRecurringTuesday = model.weeklyRecurring.tuesday,
+                weeklyRecurringWednesday = model.weeklyRecurring.wednesday,
+                weeklyRecurringThursday = model.weeklyRecurring.thursday,
+                weeklyRecurringFriday = model.weeklyRecurring.friday,
+                weeklyRecurringSaturday = model.weeklyRecurring.saturday,
+                weeklyRecurringSunday = model.weeklyRecurring.sunday,
+                active = model.active
             )
         }
     }
