@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gamingwakeup.databinding.FragmentAlarmListBinding
 import com.example.gamingwakeup.view.adapter.AlarmListAdapter
 import com.example.gamingwakeup.viewmodel.AlarmListViewModel
@@ -28,10 +29,8 @@ class AlarmListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAlarmListBinding.inflate(layoutInflater, container, false)
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
-        setupAdapterToRecyclerView()
+        setupBinding(inflater, container)
+        setupRecyclerView()
         setupAdapter()
         setupNavigationObserver()
         setupFloatingActionButton()
@@ -40,11 +39,20 @@ class AlarmListFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupAdapterToRecyclerView() {
+    private fun setupBinding(inflater: LayoutInflater, container: ViewGroup?) {
+        binding = FragmentAlarmListBinding.inflate(layoutInflater, container, false)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+    }
+
+    private fun setupRecyclerView() {
         val recyclerView = binding.alarmListRecyclerView
-        recyclerView.adapter = AlarmListAdapter(AlarmListAdapter.OnClickListener { alarm ->
-            viewModel.navigateToAddEditAlarmFragment(alarm)
-        })
+        recyclerView.apply {
+            this.layoutManager = LinearLayoutManager(context)
+            this.adapter = AlarmListAdapter(AlarmListAdapter.OnClickListener { alarm ->
+                viewModel.navigateToAddEditAlarmFragment(alarm)
+            })
+        }
     }
 
     private fun setupAdapter() {
@@ -62,9 +70,7 @@ class AlarmListFragment : Fragment() {
             if (it != null) {
                 this.findNavController()
                     .navigate(
-                        AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(
-                            it.id
-                        )
+                        AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(it)
                     )
             }
         })
@@ -74,9 +80,7 @@ class AlarmListFragment : Fragment() {
         val fab = binding.fabCreateAlarm
         fab.setOnClickListener {
             this.findNavController().navigate(
-                AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(
-                    0
-                )
+                AlarmListFragmentDirections.actionAlarmListFragmentToAddEditAlarmFragment(null)
             )
         }
     }

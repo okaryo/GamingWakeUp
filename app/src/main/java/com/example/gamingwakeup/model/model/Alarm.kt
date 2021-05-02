@@ -7,20 +7,23 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import android.os.Parcelable
 import android.util.Log
 import com.example.gamingwakeup.model.data.repository.AlarmRepository
 import com.example.gamingwakeup.view.activity.GamingAlarmActivity
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
+@Parcelize
 data class Alarm(
     val id: Int,
     val hour: Int,
     val minute: Int,
+    val vibration: Boolean,
     val sound: SoundSetting,
-    val vibration: VibrationSetting,
     val weeklyRecurring: WeeklyRecurringSetting,
     val active: Boolean
-) {
+): Parcelable {
     fun schedule(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val alarmIntent = Intent(context, AlarmReceiver::class.java)

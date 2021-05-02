@@ -39,8 +39,6 @@
                 android:id="@+id/alarmListRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar"
                 tools:cotext="com.example.gamingwakeup.view.activity.MainActivity"
                 tools:layout_editor_absoluteX="-36dp"
                 tools:listitem="@layout/view_alarm_list_item" />

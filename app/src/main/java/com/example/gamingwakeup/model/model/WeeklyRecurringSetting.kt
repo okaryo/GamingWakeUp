@@ -1,5 +1,9 @@
 package com.example.gamingwakeup.model.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class WeeklyRecurringSetting(
     val monday: Boolean,
     val tuesday: Boolean,
@@ -8,4 +12,4 @@ data class WeeklyRecurringSetting(
     val friday: Boolean,
     val saturday: Boolean,
     val sunday: Boolean
-)
+): Parcelable

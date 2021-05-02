@@ -20,11 +20,26 @@
         android:id="@+id/addEditAlarmFragment"
         android:name="com.example.gamingwakeup.view.fragment.AddEditAlarmFragment"
         android:label="AddEditAlarmFragment">
-        <argument
-            android:name="alarmId"
-            app:argType="integer" />
         <action
             android:id="@+id/action_addEditAlarmFragment_to_alarmListFragment"
             app:destination="@id/alarmListFragment" />
+        <action
+            android:id="@+id/action_addEditAlarmFragment_to_soundSettingFragment"
+            app:destination="@id/soundSettingFragment" />
+        <argument
+            android:name="alarm"
+            app:argType="com.example.gamingwakeup.model.model.Alarm"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/soundSettingFragment"
+        android:name="com.example.gamingwakeup.view.fragment.SoundSettingFragment"
+        android:label="SoundSettingFragment" >
+        <action
+            android:id="@+id/action_soundSettingFragment_to_addEditAlarmFragment"
+            app:destination="@id/addEditAlarmFragment" />
+        <argument
+            android:name="alarm"
+            app:argType="com.example.gamingwakeup.model.model.Alarm" />
     </fragment>
 </navigation>
