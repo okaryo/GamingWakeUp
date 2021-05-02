@@ -19,6 +19,7 @@ import java.util.*
 class AddEditAlarmViewModel private constructor(
     private val repository: AlarmRepository,
     private val applicationContext: Context,
+    private val alarm: Alarm?,
     calender: Calendar
 ) : BaseObservable() {
     @Bindable
@@ -27,19 +28,33 @@ class AddEditAlarmViewModel private constructor(
     var hour = calender.get(Calendar.HOUR_OF_DAY)
     @Bindable
     var minute = calender.get(Calendar.MINUTE)
+    val recurring: LiveData<Boolean>
+        get() = _recurring
     val hasVibration: LiveData<Boolean>
         get() = _hasVibration
+    val weeklyRecurringSetting: WeeklyRecurringSetting
+        get() = _weeklyRecurringSetting
     val navigateToAlarmListFragment: LiveData<Boolean>
         get() = _navigateToAlarmListFragment
     val toastMessageForAlarmListFragment: String
         get() = _toastMessageForAlarmListFragment
     private var _alarmId = 0
+    private val _recurring = MutableLiveData(true)
     private val _hasVibration = MutableLiveData(true)
+    private var _weeklyRecurringSetting = WeeklyRecurringSetting(
+        monday = true,
+        tuesday = true,
+        wednesday = true,
+        thursday = true,
+        friday = true,
+        saturday = true,
+        sunday = true
+    )
     private var isNewAlarm = false
     private val _navigateToAlarmListFragment = MutableLiveData(false)
     private var _toastMessageForAlarmListFragment = ""
 
-    fun initialize(alarm: Alarm?) {
+    init {
         if (alarm == null) {
             isNewAlarm = true
         } else {
@@ -47,7 +62,9 @@ class AddEditAlarmViewModel private constructor(
             hour = alarm.hour
             minute = alarm.minute
             soundVolume = alarm.sound.volume
+            _recurring.value = alarm.recurring
             _hasVibration.value = alarm.vibration
+            _weeklyRecurringSetting = alarm.weeklyRecurring
         }
     }
 
@@ -64,6 +81,7 @@ class AddEditAlarmViewModel private constructor(
                 minute = minute,
                 sound = SoundSetting(name = "name", volume = soundVolume),
                 vibration = currentHasVibration,
+                recurring = true,
                 weeklyRecurring = WeeklyRecurringSetting(
                     monday = true,
                     tuesday = true,
@@ -109,6 +127,7 @@ class AddEditAlarmViewModel private constructor(
             hour = hour,
             minute = minute,
             vibration = _hasVibration.value!!,
+            recurring = true,
             sound = SoundSetting(
                 name = "sound title",
                 volume = soundVolume
@@ -126,6 +145,35 @@ class AddEditAlarmViewModel private constructor(
         )
     }
 
+    fun onChangeRecurringSetting(isRecurring: Boolean) {
+        _recurring.value = isRecurring
+    }
+
+    fun onChangeWeeklyRecurringSetting(index: Int) {
+        val currentWeeklyRecurringSetting = _weeklyRecurringSetting
+        _weeklyRecurringSetting = when (index) {
+            0 -> currentWeeklyRecurringSetting.copy(monday = !currentWeeklyRecurringSetting.monday)
+            1 -> currentWeeklyRecurringSetting.copy(tuesday = !currentWeeklyRecurringSetting.tuesday)
+            2 -> currentWeeklyRecurringSetting.copy(wednesday = !currentWeeklyRecurringSetting.wednesday)
+            3 -> currentWeeklyRecurringSetting.copy(thursday = !currentWeeklyRecurringSetting.thursday)
+            4 -> currentWeeklyRecurringSetting.copy(friday = !currentWeeklyRecurringSetting.friday)
+            5 -> currentWeeklyRecurringSetting.copy(saturday = !currentWeeklyRecurringSetting.saturday)
+            else -> currentWeeklyRecurringSetting.copy(sunday = !currentWeeklyRecurringSetting.sunday)
+        }
+    }
+
+    fun dayOfWeekRecurringSetting(index: Int): Boolean {
+        return when (index) {
+            0 -> _weeklyRecurringSetting.monday
+            1 -> _weeklyRecurringSetting.tuesday
+            2 -> _weeklyRecurringSetting.wednesday
+            3 -> _weeklyRecurringSetting.thursday
+            4 -> _weeklyRecurringSetting.friday
+            5 -> _weeklyRecurringSetting.saturday
+            else -> _weeklyRecurringSetting.sunday
+        }
+    }
+
     private fun createAlarm(alarm: Alarm) = GlobalScope.launch { alarm.create(repository) }
 
     private fun updateAlarm(alarm: Alarm) = GlobalScope.launch { alarm.update(repository) }
@@ -140,12 +188,12 @@ class AddEditAlarmViewModel private constructor(
     }
 
     companion object {
-        fun create(application: Application): AddEditAlarmViewModel {
+        fun create(application: Application, alarm: Alarm?): AddEditAlarmViewModel {
             val applicationContext = application.applicationContext
             val calender = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"), Locale.JAPAN)
             val database = AlarmDatabase.getInstance(applicationContext)
             val repository = AlarmRepository(database)
-            return AddEditAlarmViewModel(repository, applicationContext, calender)
+            return AddEditAlarmViewModel(repository, applicationContext, alarm, calender)
         }
     }
 }
