@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.gamingwakeup.R
 import com.example.gamingwakeup.databinding.FragmentAddEditAlarmBinding
 import com.example.gamingwakeup.viewmodel.AddEditAlarmViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class AddEditAlarmFragment : Fragment() {
     private lateinit var binding: FragmentAddEditAlarmBinding
@@ -35,6 +33,10 @@ class AddEditAlarmFragment : Fragment() {
         setupToolbar()
         setupListener()
         setupNavigationObserver()
+        setupNavigationToSoundSettingPage()
+
+
+
 
         return binding.root
     }
@@ -45,9 +47,10 @@ class AddEditAlarmFragment : Fragment() {
         binding.viewModel = viewModel
     }
 
+    // TODO: これいらない。by lazy でやれば遅延できたはず
     private fun setupViewModel() {
         arguments = AddEditAlarmFragmentArgs.fromBundle(requireArguments())
-        viewModel.initialize(arguments.alarmId)
+        viewModel.initialize(arguments.alarm)
     }
 
     private fun setupTimePickerTo24HourView() {
@@ -63,21 +66,20 @@ class AddEditAlarmFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        val navigation = this.findNavController()
         binding.toolbar.apply {
-            title = if (arguments.alarmId == 0) getString(R.string.toolbar_title_create_alarm)
+            title = if (arguments.alarm == null) getString(R.string.toolbar_title_create_alarm)
             else getString(R.string.toolbar_title_edit_alarm)
 
             setNavigationIcon(R.drawable.ic_arrow_back)
             setNavigationOnClickListener {
-                navigation
+                this.findNavController()
                     .navigate(
                         AddEditAlarmFragmentDirections.actionAddEditAlarmFragmentToAlarmListFragment(
                             viewModel.toastMessageForAlarmListFragment
                         )
                     )
             }
-            if (arguments.alarmId != 0) {
+            if (arguments.alarm != null) {
                 inflateMenu(R.menu.menu_delete_alarm)
                 setOnMenuItemClickListener {
                     when (it.itemId) {
@@ -106,5 +108,16 @@ class AddEditAlarmFragment : Fragment() {
                 )
             }
         })
+    }
+
+    private fun setupNavigationToSoundSettingPage() {
+        val soundSettingSection = binding.soundSettingSection
+        soundSettingSection.setOnClickListener {
+            findNavController().navigate(
+                AddEditAlarmFragmentDirections.actionAddEditAlarmFragmentToSoundSettingFragment(
+                    viewModel.currentAlarm()
+                )
+            )
+        }
     }
 }

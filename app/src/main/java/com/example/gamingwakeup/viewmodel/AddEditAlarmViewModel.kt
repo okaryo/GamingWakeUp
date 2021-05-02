@@ -10,14 +10,13 @@ import com.example.gamingwakeup.model.data.database.AlarmDatabase
 import com.example.gamingwakeup.model.data.repository.AlarmRepository
 import com.example.gamingwakeup.model.model.Alarm
 import com.example.gamingwakeup.model.model.SoundSetting
-import com.example.gamingwakeup.model.model.VibrationSetting
 import com.example.gamingwakeup.model.model.WeeklyRecurringSetting
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
-class AddEditAlarmViewModel(
+class AddEditAlarmViewModel private constructor(
     private val repository: AlarmRepository,
     private val applicationContext: Context,
     calender: Calendar
@@ -40,18 +39,15 @@ class AddEditAlarmViewModel(
     private val _navigateToAlarmListFragment = MutableLiveData(false)
     private var _toastMessageForAlarmListFragment = ""
 
-    fun initialize(alarmId: Int) {
-        _alarmId = alarmId
-        if (_alarmId == 0) {
+    fun initialize(alarm: Alarm?) {
+        if (alarm == null) {
             isNewAlarm = true
         } else {
-            val alarm = runBlocking {
-                repository.getAlarm(_alarmId)
-            }
+            _alarmId = alarm.id
             hour = alarm.hour
             minute = alarm.minute
             soundVolume = alarm.sound.volume
-            _hasVibration.value = alarm.vibration.active
+            _hasVibration.value = alarm.vibration
         }
     }
 
@@ -67,7 +63,7 @@ class AddEditAlarmViewModel(
                 hour = hour,
                 minute = minute,
                 sound = SoundSetting(name = "name", volume = soundVolume),
-                vibration = VibrationSetting(active = currentHasVibration),
+                vibration = currentHasVibration,
                 weeklyRecurring = WeeklyRecurringSetting(
                     monday = true,
                     tuesday = true,
@@ -105,6 +101,29 @@ class AddEditAlarmViewModel(
         } catch (e: Exception) {
             navigateBackToAlarmListFragment("Failed to delete alarm.")
         }
+    }
+
+    fun currentAlarm(): Alarm {
+        return Alarm(
+            id = _alarmId,
+            hour = hour,
+            minute = minute,
+            vibration = _hasVibration.value!!,
+            sound = SoundSetting(
+                name = "sound title",
+                volume = soundVolume
+            ),
+            weeklyRecurring = WeeklyRecurringSetting(
+                monday = true,
+                tuesday = true,
+                wednesday = true,
+                thursday = true,
+                friday = true,
+                saturday = true,
+                sunday = true
+            ),
+            active = true
+        )
     }
 
     private fun createAlarm(alarm: Alarm) = GlobalScope.launch { alarm.create(repository) }
