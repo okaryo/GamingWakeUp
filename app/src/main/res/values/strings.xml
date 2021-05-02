@@ -19,4 +19,12 @@
     <string name="game_number_in_order_button_number_3">3</string>
     <string name="game_number_in_order_button_number_2">2</string>
     <string name="game_number_in_order_button_number_1">1</string>
+    <string name="recurringCheckboxLabel">Repeat</string>
+    <string name="mondayRecurringButtonText">M</string>
+    <string name="tuesdayRecurringButtonText">T</string>
+    <string name="wednesdayRecurringButtonText">W</string>
+    <string name="thursdayRecurringButtonText">T</string>
+    <string name="fridayRecurringButtonText">F</string>
+    <string name="saturdayRecurringButtonText">S</string>
+    <string name="sundayRecurringButtonText">S</string>
 </resources>
