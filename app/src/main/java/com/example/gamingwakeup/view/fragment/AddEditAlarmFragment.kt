@@ -17,8 +17,9 @@ class AddEditAlarmFragment : Fragment() {
     private lateinit var arguments: AddEditAlarmFragmentArgs
 
     private val viewModel: AddEditAlarmViewModel by lazy {
+        arguments = AddEditAlarmFragmentArgs.fromBundle(requireArguments())
         val activity = requireNotNull(this.activity)
-        AddEditAlarmViewModel.create(activity.application)
+        AddEditAlarmViewModel.create(activity.application, arguments.alarm)
     }
 
     override fun onCreateView(
@@ -27,16 +28,14 @@ class AddEditAlarmFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         setupBinding(inflater, container)
-        setupViewModel()
         setupTimePickerTo24HourView()
         setupClickButtonListener()
         setupToolbar()
         setupListener()
         setupNavigationObserver()
         setupNavigationToSoundSettingPage()
-
-
-
+        setupRecurringSettingSection()
+        setupWeeklyRecurringSettingSection()
 
         return binding.root
     }
@@ -45,12 +44,6 @@ class AddEditAlarmFragment : Fragment() {
         binding = FragmentAddEditAlarmBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-    }
-
-    // TODO: これいらない。by lazy でやれば遅延できたはず
-    private fun setupViewModel() {
-        arguments = AddEditAlarmFragmentArgs.fromBundle(requireArguments())
-        viewModel.initialize(arguments.alarm)
     }
 
     private fun setupTimePickerTo24HourView() {
@@ -118,6 +111,45 @@ class AddEditAlarmFragment : Fragment() {
                     viewModel.currentAlarm()
                 )
             )
+        }
+    }
+
+    private fun setupRecurringSettingSection() {
+        val recurringCheckbox = binding.recurringCheckbox
+        recurringCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            val weeklyRecurringSettingSection = binding.WeeklyRecurringSettingSection
+            viewModel.onChangeRecurringSetting(isChecked)
+            if (isChecked) {
+                weeklyRecurringSettingSection.visibility = View.VISIBLE
+            } else {
+                weeklyRecurringSettingSection.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setupWeeklyRecurringSettingSection() {
+        val weeklyRecurringSettingButtons = listOf(
+            binding.mondayRecurringButton,
+            binding.tuesdayRecurringButton,
+            binding.wednesdayRecurringButton,
+            binding.thursdayRecurringButton,
+            binding.fridayRecurringButton,
+            binding.saturdayRecurringButton,
+            binding.sundayRecurringButton
+        )
+        val changeButtonStyle = { button: View, recurringSetting: Boolean ->
+            button.background = if (recurringSetting) {
+                resources.getDrawable(R.drawable.shape_weekly_recurring_setting_button_selected, null)
+            } else {
+                resources.getDrawable(R.drawable.shape_weekly_recurring_setting_button_unselected, null)
+            }
+        }
+        weeklyRecurringSettingButtons.forEachIndexed { index, button ->
+            changeButtonStyle(button, viewModel.dayOfWeekRecurringSetting(index))
+            button.setOnClickListener {
+                viewModel.onChangeWeeklyRecurringSetting(index)
+                changeButtonStyle(button, viewModel.dayOfWeekRecurringSetting(index))
+            }
         }
     }
 }
