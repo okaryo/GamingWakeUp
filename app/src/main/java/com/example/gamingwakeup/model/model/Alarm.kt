@@ -20,6 +20,7 @@ data class Alarm(
     val hour: Int,
     val minute: Int,
     val vibration: Boolean,
+    val recurring: Boolean,
     val sound: SoundSetting,
     val weeklyRecurring: WeeklyRecurringSetting,
     val active: Boolean
