@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.example.gamingwakeup.viewmodel.GamingAlarmNumberInOrderViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,6 +20,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
+            android:textSize="72sp"
+            android:text="@{@string/time_format(viewModel.currentTimeHour, viewModel.currentTimeMinute)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -38,72 +42,133 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:text="@string/game_description_number_in_order"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-        <androidx.gridlayout.widget.GridLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            app:columnCount="3"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/game_desctiption"
-            app:rowCount="3">
+            app:layout_constraintTop_toBottomOf="@+id/game_desctiption">
 
             <Button
                 android:id="@+id/gameNumberInOrderButton1"
                 style="@style/NumberButton"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/gameNumberInOrderButton4"
+                app:layout_constraintEnd_toStartOf="@+id/gameNumberInOrderButton2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/gameNumberInOrderButton4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/game_number_in_order_button_number_1" />
 
             <Button
                 android:id="@+id/gameNumberInOrderButton2"
                 style="@style/NumberButton"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/gameNumberInOrderButton5"
+                app:layout_constraintEnd_toStartOf="@+id/gameNumberInOrderButton3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/gameNumberInOrderButton1"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/game_number_in_order_button_number_2" />
 
             <Button
                 android:id="@+id/gameNumberInOrderButton3"
                 style="@style/NumberButton"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/gameNumberInOrderButton6"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/gameNumberInOrderButton2"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/game_number_in_order_button_number_3" />
 
             <Button
                 android:id="@+id/gameNumberInOrderButton4"
                 style="@style/NumberButton"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/gameNumberInOrderButton7"
+                app:layout_constraintEnd_toStartOf="@+id/gameNumberInOrderButton5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gameNumberInOrderButton1"
                 tools:text="@string/game_number_in_order_button_number_4" />
 
             <Button
                 android:id="@+id/gameNumberInOrderButton5"
                 style="@style/NumberButton"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/gameNumberInOrderButton8"
+                app:layout_constraintEnd_toStartOf="@+id/gameNumberInOrderButton6"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/gameNumberInOrderButton4"
+                app:layout_constraintTop_toBottomOf="@+id/gameNumberInOrderButton2"
                 tools:text="@string/game_number_in_order_button_number_5" />
 
             <Button
                 android:id="@+id/gameNumberInOrderButton6"
                 style="@style/NumberButton"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/gameNumberInOrderButton9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/gameNumberInOrderButton5"
+                app:layout_constraintTop_toBottomOf="@+id/gameNumberInOrderButton3"
                 tools:text="@string/game_number_in_order_button_number_6" />
 
             <Button
                 android:id="@+id/gameNumberInOrderButton7"
                 style="@style/NumberButton"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/gameNumberInOrderButton8"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gameNumberInOrderButton4"
                 tools:text="@string/game_number_in_order_button_number_7" />
 
             <Button
                 android:id="@+id/gameNumberInOrderButton8"
                 style="@style/NumberButton"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/gameNumberInOrderButton9"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/gameNumberInOrderButton7"
+                app:layout_constraintTop_toBottomOf="@+id/gameNumberInOrderButton5"
                 tools:text="@string/game_number_in_order_button_number_8" />
 
             <Button
                 android:id="@+id/gameNumberInOrderButton9"
                 style="@style/NumberButton"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/gameNumberInOrderButton8"
+                app:layout_constraintTop_toBottomOf="@+id/gameNumberInOrderButton6"
                 tools:text="@string/game_number_in_order_button_number_9" />
-        </androidx.gridlayout.widget.GridLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

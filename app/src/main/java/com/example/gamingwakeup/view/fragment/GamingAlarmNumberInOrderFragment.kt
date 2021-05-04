@@ -36,15 +36,17 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentGamingAlarmNumberInOrderBinding.inflate(inflater, container, false)
+        setupBinding(inflater, container)
         setupNumberButton()
         observeOnGameCompleted()
+        setupCurrentTimeObserver()
 
         return binding.root
     }
 
     override fun onDestroy() {
         activity?.finishAndRemoveTask()
+
         super.onDestroy()
     }
 
@@ -71,6 +73,11 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
 
     override fun stopAlarmAndVibration() {
         mediaPlayer.stop()
+    }
+
+    private fun setupBinding(inflater: LayoutInflater, container: ViewGroup?) {
+        binding = FragmentGamingAlarmNumberInOrderBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
     }
 
     private fun setupNumberButton() {
@@ -102,15 +109,28 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
                 val number = Integer.parseInt(button.text.toString())
                 val isSuccess = viewModel.onTappedNumberButton(number)
                 if (isSuccess) {
-                    val successColor = resources.getColor(R.color.primary)
-                    button.setBackgroundColor(successColor)
+                    button.background =
+                        resources.getDrawable(R.drawable.style_game_number_panel_tapped, null)
                 } else {
                     numberButtons.forEach {
-                        val originColor = resources.getColor(R.color.white)
-                        it.setBackgroundColor(originColor)
+                        it.background =
+                            resources.getDrawable(R.drawable.style_game_number_panel_untapped, null)
                     }
                 }
             }
         }
+    }
+
+    private fun setupCurrentTimeObserver() {
+        val currentTime = binding.currentTime
+        val changeCurrentTime = {
+            currentTime.text = String.format(
+                getString(R.string.time_format),
+                viewModel.currentTimeHour.value,
+                viewModel.currentTimeMinute.value
+            )
+        }
+        viewModel.currentTimeHour.observe(viewLifecycleOwner, Observer { changeCurrentTime() })
+        viewModel.currentTimeMinute.observe(viewLifecycleOwner, Observer { changeCurrentTime() })
     }
 }
