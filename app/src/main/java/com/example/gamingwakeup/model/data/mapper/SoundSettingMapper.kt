@@ -4,9 +4,9 @@ import com.example.gamingwakeup.model.model.SoundSetting
 
 class SoundSettingMapper {
     companion object {
-        fun transform(name: String, volume: Int): SoundSetting {
+        fun transform(title: String, volume: Int): SoundSetting {
             return SoundSetting(
-                name = name,
+                title = title,
                 volume = volume
             )
         }
