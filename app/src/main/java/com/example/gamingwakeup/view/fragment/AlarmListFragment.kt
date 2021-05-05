@@ -17,7 +17,6 @@ import com.example.gamingwakeup.viewmodel.AlarmListViewModel
 class AlarmListFragment : Fragment() {
     private val args: AlarmListFragmentArgs by navArgs()
     private lateinit var binding: FragmentAlarmListBinding
-
     private val viewModel: AlarmListViewModel by lazy {
         val activity = requireNotNull(this.activity)
         AlarmListViewModel.Factory(activity.application)
@@ -40,7 +39,7 @@ class AlarmListFragment : Fragment() {
     }
 
     private fun setupBinding(inflater: LayoutInflater, container: ViewGroup?) {
-        binding = FragmentAlarmListBinding.inflate(layoutInflater, container, false)
+        binding = FragmentAlarmListBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
     }
