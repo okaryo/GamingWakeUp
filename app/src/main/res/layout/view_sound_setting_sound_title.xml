@@ -11,8 +11,11 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/soundTitleItem"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="48dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <ImageView
             android:id="@+id/imageView6"
@@ -24,7 +27,7 @@
             app:srcCompat="@drawable/ic_notifications_active" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/soundTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -34,8 +37,20 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="title" />
 
+        <es.claucookie.miniequalizerlibrary.EqualizerView
+            android:id="@+id/equalizerIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:animDuration="5000"
+            app:foregroundColor="@color/icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/selectedCheckIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/selectedCheckIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

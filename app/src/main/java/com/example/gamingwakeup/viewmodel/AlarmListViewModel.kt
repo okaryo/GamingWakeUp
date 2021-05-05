@@ -2,25 +2,27 @@ package com.example.gamingwakeup.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.example.gamingwakeup.model.data.database.AlarmDatabase
+import com.example.gamingwakeup.model.data.repository.AlarmListRepository
 import com.example.gamingwakeup.model.model.Alarm
 import com.example.gamingwakeup.model.model.AlarmList
-import com.example.gamingwakeup.model.data.repository.AlarmListRepository
-import com.example.gamingwakeup.model.data.database.AlarmDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
+import kotlinx.coroutines.withContext
 
 class AlarmListViewModel(private val repository: AlarmListRepository) : ViewModel() {
-    private val _alarmList = MutableLiveData<AlarmList>()
     val alarmList: LiveData<AlarmList>
         get() = _alarmList
-
-    private val _navigateToAddEditAlarmFragment = MutableLiveData<Alarm>()
     val navigateToAddEditAlarmFragment: LiveData<Alarm>
         get() = _navigateToAddEditAlarmFragment
+    private val _alarmList = MutableLiveData<AlarmList>()
+    private val _navigateToAddEditAlarmFragment = MutableLiveData<Alarm>()
 
     init {
         viewModelScope.launch {
-            val alarmList = repository.getAlarmList()
+            val alarmList = withContext(Dispatchers.IO) {
+                repository.getAlarmList()
+            }
             _alarmList.value = alarmList
         }
     }

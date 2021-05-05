@@ -1,7 +1,11 @@
 package com.example.gamingwakeup.viewmodel
 
 import android.app.Application
+import android.content.ContentResolver
 import android.content.Context
+import android.os.Build
+import android.os.Bundle
+import android.provider.MediaStore
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
@@ -23,22 +27,21 @@ class AddEditAlarmViewModel private constructor(
     calender: Calendar
 ) : BaseObservable() {
     @Bindable
-    var soundVolume: Int = 50
-    @Bindable
     var hour = calender.get(Calendar.HOUR_OF_DAY)
+
     @Bindable
     var minute = calender.get(Calendar.MINUTE)
     val recurring: LiveData<Boolean>
         get() = _recurring
-    val hasVibration: LiveData<Boolean>
-        get() = _hasVibration
     val weeklyRecurringSetting: WeeklyRecurringSetting
         get() = _weeklyRecurringSetting
     val navigateToAlarmListFragment: LiveData<Boolean>
         get() = _navigateToAlarmListFragment
     val toastMessageForAlarmListFragment: String
         get() = _toastMessageForAlarmListFragment
+    lateinit var soundTitle: String
     private var _alarmId = 0
+    private var _soundVolume = 50
     private val _recurring = MutableLiveData(true)
     private val _hasVibration = MutableLiveData(true)
     private var _weeklyRecurringSetting = WeeklyRecurringSetting(
@@ -57,11 +60,13 @@ class AddEditAlarmViewModel private constructor(
     init {
         if (alarm == null) {
             isNewAlarm = true
+            setupDefaultSoundTitle()
         } else {
             _alarmId = alarm.id
             hour = alarm.hour
             minute = alarm.minute
-            soundVolume = alarm.sound.volume
+            soundTitle = alarm.sound.title
+            _soundVolume = alarm.sound.volume
             _recurring.value = alarm.recurring
             _hasVibration.value = alarm.vibration
             _weeklyRecurringSetting = alarm.weeklyRecurring
@@ -79,7 +84,7 @@ class AddEditAlarmViewModel private constructor(
                 id = _alarmId,
                 hour = hour,
                 minute = minute,
-                sound = SoundSetting(name = "name", volume = soundVolume),
+                sound = SoundSetting(title = soundTitle, volume = _soundVolume),
                 vibration = currentHasVibration,
                 recurring = true,
                 weeklyRecurring = WeeklyRecurringSetting(
@@ -129,8 +134,8 @@ class AddEditAlarmViewModel private constructor(
             vibration = _hasVibration.value!!,
             recurring = true,
             sound = SoundSetting(
-                name = "sound title",
-                volume = soundVolume
+                title = soundTitle,
+                volume = _soundVolume
             ),
             weeklyRecurring = WeeklyRecurringSetting(
                 monday = true,
@@ -171,6 +176,47 @@ class AddEditAlarmViewModel private constructor(
             4 -> _weeklyRecurringSetting.friday
             5 -> _weeklyRecurringSetting.saturday
             else -> _weeklyRecurringSetting.sunday
+        }
+    }
+
+    private fun setupDefaultSoundTitle() {
+        val projection = arrayOf(
+            MediaStore.Audio.AudioColumns.TITLE,
+            MediaStore.Audio.AudioColumns.IS_ALARM
+        )
+        val selection = "${MediaStore.Audio.AudioColumns.IS_ALARM} != 0"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            applicationContext.contentResolver?.query(
+                MediaStore.Audio.Media.INTERNAL_CONTENT_URI,
+                projection,
+                Bundle().apply {
+                    putString(ContentResolver.QUERY_ARG_SQL_SELECTION, selection)
+                    putString(
+                        ContentResolver.QUERY_ARG_SORT_COLUMNS,
+                        MediaStore.Audio.AudioColumns.TITLE
+                    )
+                    putInt(
+                        ContentResolver.QUERY_ARG_SORT_DIRECTION,
+                        ContentResolver.QUERY_SORT_DIRECTION_ASCENDING
+                    )
+                    putInt(ContentResolver.QUERY_ARG_LIMIT, 1)
+                },
+                null
+            )
+        } else {
+            val order = "${MediaStore.Audio.AudioColumns.TITLE} ASC LIMIT 1"
+            applicationContext.contentResolver?.query(
+                MediaStore.Audio.Media.INTERNAL_CONTENT_URI,
+                projection,
+                selection,
+                null,
+                order
+            )
+        }.use { cursor ->
+            val titleColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE)
+            if (cursor!!.moveToFirst()) {
+                soundTitle = cursor.getString(titleColumn!!)
+            }
         }
     }
 

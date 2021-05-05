@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
-class GamingAlarmNumberInOrderViewModel: ViewModel(), GamingAlarmBaseViewModel {
+class GamingAlarmNumberInOrderViewModel : ViewModel(), GamingAlarmBaseViewModel {
     override val isComplete: LiveData<Boolean>
         get() = _isComplete
     override val isFailure: LiveData<Boolean>
@@ -46,12 +46,11 @@ class GamingAlarmNumberInOrderViewModel: ViewModel(), GamingAlarmBaseViewModel {
     private fun startTimeScheduler() {
         val updateCurrentTime = {
             val currentTime = LocalTime.now()
-            println(currentTime)
             _currentTimeHour.value = currentTime.hour
             _currentTimeMinute.value = currentTime.minute
         }
         viewModelScope.launch {
-            while(!_isComplete.value!!) {
+            while (!_isComplete.value!!) {
                 delay(10000)
                 updateCurrentTime()
             }

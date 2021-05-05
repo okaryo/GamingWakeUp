@@ -2,6 +2,7 @@
 <resources>
     <color name="transparent">#00FFFFFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="background">#FAFAFA</color>
     <color name="primary">#4CAF50</color>
     <color name="primary_light">#80E27E</color>
     <color name="primary_dark">#087F23</color>
@@ -11,4 +12,5 @@
     <color name="secondary_dark">#A0AF22</color>
     <color name="on_secondary">#424242</color>
     <color name="divider">#9E9E9E</color>
+    <color name="icon">#424242</color>
 </resources>

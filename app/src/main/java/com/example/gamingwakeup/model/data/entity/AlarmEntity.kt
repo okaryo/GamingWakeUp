@@ -11,7 +11,7 @@ data class AlarmEntity(
     val minute: Int,
     val vibration: Boolean,
     val recurring: Boolean,
-    @ColumnInfo(name = "sound_name") val soundName: String,
+    @ColumnInfo(name = "sound_title") val soundTitle: String,
     @ColumnInfo(name = "sound_volume") val soundVolume: Int,
     @ColumnInfo(name = "weekly_recurring_monday") val weeklyRecurringMonday: Boolean,
     @ColumnInfo(name = "weekly_recurring_tuesday") val weeklyRecurringTuesday: Boolean,

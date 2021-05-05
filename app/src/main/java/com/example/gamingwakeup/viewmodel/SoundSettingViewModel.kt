@@ -1,6 +1,9 @@
 package com.example.gamingwakeup.viewmodel
 
+import android.content.ContentUris
 import android.content.Context
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.provider.MediaStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,31 +17,64 @@ class SoundSettingViewModel private constructor(
 ) : ViewModel() {
     val volume: LiveData<Int>
         get() = _volume
-    val name: LiveData<String>
-        get() = _name
-    val soundTitles: List<String>
+    val selectedSoundTitle: LiveData<String>
+        get() = _selectedSoundTitle
+    val isSoundPlaying: Boolean
+        get() = _mediaPlayer.isPlaying
+    val soundTitles: Map<String, Long>
         get() = _soundTitles
     private val _volume = MutableLiveData<Int>()
-    private val _name = MutableLiveData<String>()
-    private val _soundTitles = mutableListOf<String>()
+    private val _selectedSoundTitle = MutableLiveData<String>()
+    private val _soundTitles = mutableMapOf<String, Long>()
+    private var _mediaPlayer = MediaPlayer()
 
     init {
         _volume.value = alarm.sound.volume
-        _name.value = alarm.sound.name
+        _selectedSoundTitle.value = alarm.sound.title
         fetchLocalAlarms()
+    }
+
+    override fun onCleared() {
+        _mediaPlayer.release()
+        super.onCleared()
     }
 
     fun currentAlarm(): Alarm {
         return alarm.copy(
             sound = SoundSetting(
-                name = _name.value!!,
+                title = _selectedSoundTitle.value!!,
                 volume = _volume.value!!
             )
         )
     }
 
+    fun onTapSoundTitle(title: String) {
+        if (title == _selectedSoundTitle.value) {
+            if (_mediaPlayer.isPlaying) stopSelectedSound()
+            else startSelectedSound()
+        } else {
+            stopSelectedSound()
+            _selectedSoundTitle.value = title
+            startSelectedSound()
+        }
+    }
+
+    private fun startSelectedSound() {
+        val uri = ContentUris.withAppendedId(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, _soundTitles[_selectedSoundTitle.value]!!)
+        _mediaPlayer = MediaPlayer().apply {
+            isLooping = true
+            setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
+            setDataSource(applicationContext, uri)
+            prepare()
+        }
+        _mediaPlayer.start()
+    }
+
+    private fun stopSelectedSound() = _mediaPlayer.stop()
+
     private fun fetchLocalAlarms() {
         val projection = arrayOf(
+            MediaStore.Audio.AudioColumns._ID,
             MediaStore.Audio.AudioColumns.TITLE,
             MediaStore.Audio.AudioColumns.IS_ALARM
         )
@@ -51,9 +87,12 @@ class SoundSettingViewModel private constructor(
             null,
             order
         ).use { cursor ->
+            val idColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns._ID)
             val titleColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE)
             while (cursor!!.moveToNext()) {
-                _soundTitles.add(cursor.getString(titleColumn!!))
+                val title = cursor.getString(titleColumn!!)
+                val id = cursor.getLong(idColumn!!)
+                _soundTitles[title] = id
             }
         }
     }
