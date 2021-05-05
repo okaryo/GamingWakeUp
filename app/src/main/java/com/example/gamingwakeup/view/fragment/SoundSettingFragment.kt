@@ -14,10 +14,19 @@ import com.example.gamingwakeup.viewmodel.SoundSettingViewModel
 
 class SoundSettingFragment : Fragment() {
     private lateinit var binding: FragmentSoundSettingBinding
-
     private val viewModel: SoundSettingViewModel by lazy {
         val arguments = SoundSettingFragmentArgs.fromBundle(requireArguments())
-        SoundSettingViewModel.crate(arguments.alarm, context!!)
+        SoundSettingViewModel.crate(arguments.alarm, requireContext())
+    }
+    private val soundSettingAdapter: SoundSettingAdapter by lazy {
+        SoundSettingAdapter(
+            viewModel.soundTitles.keys.toList(),
+            viewModel.selectedSoundTitle,
+            { viewModel.isSoundPlaying },
+            SoundSettingAdapter.OnClickListener { soundTitle ->
+                viewModel.onTapSoundTitle(soundTitle)
+            }
+        )
     }
 
     override fun onCreateView(
@@ -41,9 +50,7 @@ class SoundSettingFragment : Fragment() {
         val recyclerView = binding.soundSettingRecyclerView
         recyclerView.apply {
             this.layoutManager = LinearLayoutManager(context)
-            this.adapter = SoundSettingAdapter(
-                viewModel.soundTitles,
-                SoundSettingAdapter.OnClickListener { st -> println(st) })
+            this.adapter = soundSettingAdapter
         }
     }
 

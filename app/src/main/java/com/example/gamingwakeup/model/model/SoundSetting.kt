@@ -5,6 +5,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class SoundSetting(
-    val name: String,
+    val title: String,
     val volume: Int
 ): Parcelable
