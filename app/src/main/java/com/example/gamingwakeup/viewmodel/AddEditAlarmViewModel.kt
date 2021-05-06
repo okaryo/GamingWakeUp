@@ -28,7 +28,6 @@ class AddEditAlarmViewModel private constructor(
 ) : BaseObservable() {
     @Bindable
     var hour = calender.get(Calendar.HOUR_OF_DAY)
-
     @Bindable
     var minute = calender.get(Calendar.MINUTE)
     val recurring: LiveData<Boolean>
@@ -39,9 +38,10 @@ class AddEditAlarmViewModel private constructor(
         get() = _navigateToAlarmListFragment
     val toastMessageForAlarmListFragment: String
         get() = _toastMessageForAlarmListFragment
-    lateinit var soundTitle: String
+    val soundTitle: String
+        get() = _soundSetting.title
+    private lateinit var _soundSetting: SoundSetting
     private var _alarmId = 0
-    private var _soundVolume = 50
     private val _recurring = MutableLiveData(true)
     private val _hasVibration = MutableLiveData(true)
     private var _weeklyRecurringSetting = WeeklyRecurringSetting(
@@ -60,13 +60,12 @@ class AddEditAlarmViewModel private constructor(
     init {
         if (alarm == null) {
             isNewAlarm = true
-            setupDefaultSoundTitle()
+            setupDefaultSoundSetting()
         } else {
             _alarmId = alarm.id
             hour = alarm.hour
             minute = alarm.minute
-            soundTitle = alarm.sound.title
-            _soundVolume = alarm.sound.volume
+            _soundSetting = alarm.sound
             _recurring.value = alarm.recurring
             _hasVibration.value = alarm.vibration
             _weeklyRecurringSetting = alarm.weeklyRecurring
@@ -84,7 +83,7 @@ class AddEditAlarmViewModel private constructor(
                 id = _alarmId,
                 hour = hour,
                 minute = minute,
-                sound = SoundSetting(title = soundTitle, volume = _soundVolume),
+                sound = _soundSetting,
                 vibration = currentHasVibration,
                 recurring = true,
                 weeklyRecurring = WeeklyRecurringSetting(
@@ -104,7 +103,7 @@ class AddEditAlarmViewModel private constructor(
                 } else {
                     updateAlarm(alarm)
                 }
-                scheduleAlarm(alarm)
+                scheduleAlarm(alarm) // TODO: ここは非同期で扱えないか調査
             }
             navigateBackToAlarmListFragment("Alarm set to ${alarm.clockTimeStringFormat()}")
         } catch (e: Exception) {
@@ -133,10 +132,7 @@ class AddEditAlarmViewModel private constructor(
             minute = minute,
             vibration = _hasVibration.value!!,
             recurring = true,
-            sound = SoundSetting(
-                title = soundTitle,
-                volume = _soundVolume
-            ),
+            sound = _soundSetting,
             weeklyRecurring = WeeklyRecurringSetting(
                 monday = true,
                 tuesday = true,
@@ -179,8 +175,9 @@ class AddEditAlarmViewModel private constructor(
         }
     }
 
-    private fun setupDefaultSoundTitle() {
+    private fun setupDefaultSoundSetting() {
         val projection = arrayOf(
+            MediaStore.Audio.AudioColumns._ID,
             MediaStore.Audio.AudioColumns.TITLE,
             MediaStore.Audio.AudioColumns.IS_ALARM
         )
@@ -213,9 +210,14 @@ class AddEditAlarmViewModel private constructor(
                 order
             )
         }.use { cursor ->
+            val idColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns._ID)
             val titleColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE)
             if (cursor!!.moveToFirst()) {
-                soundTitle = cursor.getString(titleColumn!!)
+                _soundSetting = SoundSetting(
+                    id = cursor.getLong(idColumn!!),
+                    title = cursor.getString(titleColumn!!),
+                    volume = 50
+                )
             }
         }
     }
