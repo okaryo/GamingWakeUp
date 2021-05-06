@@ -12,7 +12,7 @@ class AlarmMapper {
                 minute = entity.minute,
                 vibration = entity.vibration,
                 recurring = entity.recurring,
-                sound = SoundSettingMapper.transform(entity.soundTitle, entity.soundVolume),
+                sound = SoundSettingMapper.transform(entity.soundId, entity.soundTitle, entity.soundVolume),
                 weeklyRecurring = WeeklyRecurringSettingMapper.transform(
                     entity.weeklyRecurringMonday,
                     entity.weeklyRecurringTuesday,
@@ -31,6 +31,7 @@ class AlarmMapper {
                 id = model.id,
                 hour = model.hour,
                 minute = model.minute,
+                soundId = model.sound.id,
                 soundTitle = model.sound.title,
                 soundVolume = model.sound.volume,
                 vibration = model.vibration,

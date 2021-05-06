@@ -42,6 +42,7 @@ class SoundSettingViewModel private constructor(
     fun currentAlarm(): Alarm {
         return alarm.copy(
             sound = SoundSetting(
+                id = soundTitles[_selectedSoundTitle.value]!!,
                 title = _selectedSoundTitle.value!!,
                 volume = _volume.value!!
             )
