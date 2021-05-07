@@ -3,6 +3,7 @@ package com.example.gamingwakeup.view.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -14,12 +15,15 @@ import com.example.gamingwakeup.databinding.ViewSoundSettingSoundTitleBinding
 import com.example.gamingwakeup.databinding.ViewSoundSettingSoundVolumeBinding
 
 class SoundSettingAdapter(
-    private val soundTitles: List<String>,
     private val selectedSoundTitle: LiveData<String>,
     private val isSoundPlaying: () -> Boolean,
-    private val onClickListener: OnClickListener
+    private val onClickListener: OnClickListener,
+    private val onChangeListener: OnChangeListener
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    lateinit var soundTitles: List<String>
+    var soundVolume = 50
+
     enum class ViewType {
         HEADER,
         SOUND_VOLUME,
@@ -29,7 +33,7 @@ class SoundSettingAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (ViewType.values().first { it.ordinal == viewType }) {
             ViewType.HEADER -> HeaderViewHolder.from(parent)
-            ViewType.SOUND_VOLUME -> SoundVolumeViewHolder.from(parent)
+            ViewType.SOUND_VOLUME -> SoundVolumeViewHolder.from(parent, onChangeListener)
             ViewType.SOUND_TITLE -> SoundTitleViewHolder.from(
                 parent,
                 isSoundPlaying,
@@ -42,7 +46,7 @@ class SoundSettingAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is HeaderViewHolder -> holder.bind(position)
-            is SoundVolumeViewHolder -> holder.bind()
+            is SoundVolumeViewHolder -> holder.bind(soundVolume)
             is SoundTitleViewHolder -> {
                 val offset = 3
                 holder.bind(
@@ -85,18 +89,34 @@ class SoundSettingAdapter(
         }
     }
 
-    class SoundVolumeViewHolder private constructor(private val binding: ViewSoundSettingSoundVolumeBinding) :
+    class SoundVolumeViewHolder private constructor(
+        private val binding: ViewSoundSettingSoundVolumeBinding,
+        private val onChangeListener: OnChangeListener
+    ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind() {
-            binding.volume = 50
+        fun bind(soundVolume: Int) {
+            binding.volume = soundVolume
+            binding.soundVolumeSeekbar.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    onChangeListener.onChange(progress)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
             binding.executePendingBindings()
         }
 
         companion object {
-            fun from(parent: ViewGroup): SoundVolumeViewHolder {
+            fun from(parent: ViewGroup, changeListener: OnChangeListener): SoundVolumeViewHolder {
                 val inflater = LayoutInflater.from(parent.context)
                 val binding = ViewSoundSettingSoundVolumeBinding.inflate(inflater, parent, false)
-                return SoundVolumeViewHolder(binding)
+                return SoundVolumeViewHolder(binding, changeListener)
             }
         }
     }
@@ -172,7 +192,11 @@ class SoundSettingAdapter(
         }
     }
 
-    class OnClickListener(private val clickListener: (soundTitle: String) -> Unit) {
+    class OnClickListener(val clickListener: (soundTitle: String) -> Unit) {
         fun onClick(soundTitle: String) = clickListener(soundTitle)
+    }
+
+    class OnChangeListener(private val changeListener: (soundVolume: Int) -> Unit) {
+        fun onChange(soundVolume: Int) = changeListener(soundVolume)
     }
 }
