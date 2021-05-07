@@ -23,7 +23,7 @@ class AlarmListViewModel(private val repository: AlarmListRepository) : ViewMode
             val alarmList = withContext(Dispatchers.IO) {
                 repository.getAlarmList()
             }
-            _alarmList.value = alarmList
+            _alarmList.value = alarmList.sort()
         }
     }
 
