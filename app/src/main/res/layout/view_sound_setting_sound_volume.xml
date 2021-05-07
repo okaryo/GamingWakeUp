@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/seekBar2"
+            app:layout_constraintEnd_toStartOf="@+id/soundVolumeSeekbar"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintHorizontal_weight="1"
@@ -30,7 +30,7 @@
             app:srcCompat="@drawable/ic_volume_mute" />
 
         <SeekBar
-            android:id="@+id/seekBar2"
+            android:id="@+id/soundVolumeSeekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:progress="@{volume}"
@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@+id/seekBar2"
+            app:layout_constraintStart_toEndOf="@+id/soundVolumeSeekbar"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_volume_up" />
 

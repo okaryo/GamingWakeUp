@@ -20,11 +20,13 @@ class SoundSettingFragment : Fragment() {
     }
     private val soundSettingAdapter: SoundSettingAdapter by lazy {
         SoundSettingAdapter(
-            viewModel.soundTitles.keys.toList(),
             viewModel.selectedSoundTitle,
             { viewModel.isSoundPlaying },
             SoundSettingAdapter.OnClickListener { soundTitle ->
                 viewModel.onTapSoundTitle(soundTitle)
+            },
+            SoundSettingAdapter.OnChangeListener { soundVolume ->
+                viewModel.onChangeSoundVolume(soundVolume)
             }
         )
     }
@@ -33,10 +35,11 @@ class SoundSettingFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setupBinding(inflater, container)
         setupRecyclerView()
         setupToolbar()
+        setupAdapter()
 
         return binding.root
     }
@@ -51,6 +54,14 @@ class SoundSettingFragment : Fragment() {
         recyclerView.apply {
             this.layoutManager = LinearLayoutManager(context)
             this.adapter = soundSettingAdapter
+        }
+    }
+
+    private fun setupAdapter() {
+        soundSettingAdapter.apply {
+            soundTitles = viewModel.soundTitles.keys.toList()
+            soundVolume = viewModel.volume
+            notifyDataSetChanged()
         }
     }
 
