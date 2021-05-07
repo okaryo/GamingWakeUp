@@ -15,7 +15,7 @@ class SoundSettingViewModel private constructor(
     private val alarm: Alarm,
     private val applicationContext: Context
 ) : ViewModel() {
-    val volume: LiveData<Int>
+    val volume: Int
         get() = _volume
     val selectedSoundTitle: LiveData<String>
         get() = _selectedSoundTitle
@@ -23,13 +23,13 @@ class SoundSettingViewModel private constructor(
         get() = _mediaPlayer.isPlaying
     val soundTitles: Map<String, Long>
         get() = _soundTitles
-    private val _volume = MutableLiveData<Int>()
+    private var _volume = 50
     private val _selectedSoundTitle = MutableLiveData<String>()
     private val _soundTitles = mutableMapOf<String, Long>()
     private var _mediaPlayer = MediaPlayer()
 
     init {
-        _volume.value = alarm.sound.volume
+        _volume = alarm.sound.volume
         _selectedSoundTitle.value = alarm.sound.title
         fetchLocalAlarms()
     }
@@ -44,7 +44,7 @@ class SoundSettingViewModel private constructor(
             sound = SoundSetting(
                 id = soundTitles[_selectedSoundTitle.value]!!,
                 title = _selectedSoundTitle.value!!,
-                volume = _volume.value!!
+                volume = _volume
             )
         )
     }
@@ -60,11 +60,24 @@ class SoundSettingViewModel private constructor(
         }
     }
 
+    fun onChangeSoundVolume(value: Int) {
+        _volume = value
+        val soundVolume = _volume.toFloat() / 100
+        _mediaPlayer.setVolume(soundVolume, soundVolume)
+    }
+
     private fun startSelectedSound() {
-        val uri = ContentUris.withAppendedId(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, _soundTitles[_selectedSoundTitle.value]!!)
+        val uri = ContentUris.withAppendedId(
+            MediaStore.Audio.Media.INTERNAL_CONTENT_URI,
+            _soundTitles[_selectedSoundTitle.value]!!
+        )
+        val soundVolume = _volume.toFloat() / 100
         _mediaPlayer = MediaPlayer().apply {
             isLooping = true
-            setAudioAttributes(AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build())
+            setVolume(soundVolume, soundVolume)
+            setAudioAttributes(
+                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
+            )
             setDataSource(applicationContext, uri)
             prepare()
         }
