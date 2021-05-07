@@ -19,12 +19,13 @@ class SoundSettingViewModel private constructor(
         get() = _volume
     val selectedSoundTitle: LiveData<String>
         get() = _selectedSoundTitle
-    val isSoundPlaying: Boolean
-        get() = _mediaPlayer.isPlaying
+    val isSoundPlaying: LiveData<Boolean>
+        get() = _isSoundPlaying
     val soundTitles: Map<String, Long>
         get() = _soundTitles
     private var _volume = 50
     private val _selectedSoundTitle = MutableLiveData<String>()
+    private val _isSoundPlaying = MutableLiveData(false)
     private val _soundTitles = mutableMapOf<String, Long>()
     private var _mediaPlayer = MediaPlayer()
 
@@ -82,9 +83,13 @@ class SoundSettingViewModel private constructor(
             prepare()
         }
         _mediaPlayer.start()
+        _isSoundPlaying.value = true
     }
 
-    private fun stopSelectedSound() = _mediaPlayer.stop()
+    private fun stopSelectedSound() {
+        _mediaPlayer.stop()
+        _isSoundPlaying.value = false
+    }
 
     private fun fetchLocalAlarms() {
         val projection = arrayOf(

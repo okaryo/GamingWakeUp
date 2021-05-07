@@ -1,13 +1,11 @@
 package com.example.gamingwakeup.view.adapter
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gamingwakeup.R
 import com.example.gamingwakeup.databinding.ViewSoundSettingHeaderBinding
@@ -15,14 +13,14 @@ import com.example.gamingwakeup.databinding.ViewSoundSettingSoundTitleBinding
 import com.example.gamingwakeup.databinding.ViewSoundSettingSoundVolumeBinding
 
 class SoundSettingAdapter(
-    private val selectedSoundTitle: LiveData<String>,
-    private val isSoundPlaying: () -> Boolean,
-    private val onClickListener: OnClickListener,
-    private val onChangeListener: OnChangeListener
+    private val onClickSoundTitleListener: OnClickSoundTitleListener,
+    private val onChangeSoundVolumeListener: OnChangeSoundVolumeListener
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var soundTitles: List<String>
+    lateinit var selectedSoundTitle: String
     var soundVolume = 50
+    var isSoundPlaying = false
 
     enum class ViewType {
         HEADER,
@@ -33,12 +31,11 @@ class SoundSettingAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (ViewType.values().first { it.ordinal == viewType }) {
             ViewType.HEADER -> HeaderViewHolder.from(parent)
-            ViewType.SOUND_VOLUME -> SoundVolumeViewHolder.from(parent, onChangeListener)
+            ViewType.SOUND_VOLUME -> SoundVolumeViewHolder.from(parent, onChangeSoundVolumeListener)
             ViewType.SOUND_TITLE -> SoundTitleViewHolder.from(
                 parent,
-                isSoundPlaying,
                 soundTitles,
-                onClickListener
+                onClickSoundTitleListener
             )
         }
     }
@@ -52,7 +49,8 @@ class SoundSettingAdapter(
                 holder.bind(
                     position - offset,
                     holder,
-                    selectedSoundTitle
+                    selectedSoundTitle,
+                    isSoundPlaying
                 )
             }
         }
@@ -91,7 +89,7 @@ class SoundSettingAdapter(
 
     class SoundVolumeViewHolder private constructor(
         private val binding: ViewSoundSettingSoundVolumeBinding,
-        private val onChangeListener: OnChangeListener
+        private val onChangeListener: OnChangeSoundVolumeListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(soundVolume: Int) {
@@ -113,7 +111,10 @@ class SoundSettingAdapter(
         }
 
         companion object {
-            fun from(parent: ViewGroup, changeListener: OnChangeListener): SoundVolumeViewHolder {
+            fun from(
+                parent: ViewGroup,
+                changeListener: OnChangeSoundVolumeListener
+            ): SoundVolumeViewHolder {
                 val inflater = LayoutInflater.from(parent.context)
                 val binding = ViewSoundSettingSoundVolumeBinding.inflate(inflater, parent, false)
                 return SoundVolumeViewHolder(binding, changeListener)
@@ -123,80 +124,79 @@ class SoundSettingAdapter(
 
     class SoundTitleViewHolder private constructor(
         private val binding: ViewSoundSettingSoundTitleBinding,
-        private val isSoundPlaying: () -> Boolean,
         private val soundTitles: List<String>,
-        private val clickListener: OnClickListener
+        private val clickListener: OnClickSoundTitleListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             position: Int,
             holder: RecyclerView.ViewHolder,
-            selectedSoundTitle: LiveData<String>
+            selectedSoundTitle: String,
+            isSoundPlaying: Boolean
         ) {
             binding.title = soundTitles[position]
-            setupClickListener(holder, isSoundPlaying, selectedSoundTitle)
+            setupClickListener(binding.title!!)
+            setupEqualizerIcon(isSoundPlaying)
+            setupCheckIcon(selectedSoundTitle, holder.itemView.resources)
             binding.executePendingBindings()
         }
 
-        private fun setupClickListener(
-            holder: RecyclerView.ViewHolder,
-            isSoundPlaying: () -> Boolean,
-            selectedSoundTitleLiveData: LiveData<String>
-        ) {
-            val resources = holder.itemView.resources
-            val selectedSoundTitle = binding.title!!
+        private fun setupClickListener(selectedSoundTitle: String) {
             binding.soundTitleItem.setOnClickListener {
                 clickListener.onClick(selectedSoundTitle)
-                if (isSoundPlaying()) {
-                    binding.equalizerIcon.visibility = View.VISIBLE
-                    binding.equalizerIcon.animateBars()
-                } else {
-                    binding.equalizerIcon.visibility = View.GONE
-                    binding.equalizerIcon.stopBars()
-                }
             }
-            selectedSoundTitleLiveData.observe(this.itemView.context as LifecycleOwner, Observer {
-                if (selectedSoundTitle == it) {
-                    binding.soundTitleItem.setBackgroundColor(
-                        ResourcesCompat.getColor(
-                            resources,
-                            R.color.primary_light,
-                            null
-                        )
+        }
+
+        private fun setupEqualizerIcon(isSoundPlaying: Boolean) {
+            if (isSoundPlaying) {
+                binding.equalizerIcon.visibility = View.VISIBLE
+                binding.equalizerIcon.animateBars()
+            } else {
+                binding.equalizerIcon.visibility = View.GONE
+                binding.equalizerIcon.stopBars()
+            }
+        }
+
+        private fun setupCheckIcon(selectedSoundTitle: String, resources: Resources) {
+            if (selectedSoundTitle == binding.title) {
+                binding.soundTitleItem.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.primary_light,
+                        null
                     )
-                    binding.selectedCheckIcon.visibility = View.VISIBLE
-                } else {
-                    binding.soundTitleItem.setBackgroundColor(
-                        ResourcesCompat.getColor(
-                            resources,
-                            R.color.background,
-                            null
-                        )
+                )
+                binding.selectedCheckIcon.visibility = View.VISIBLE
+            } else {
+                binding.soundTitleItem.setBackgroundColor(
+                    ResourcesCompat.getColor(
+                        resources,
+                        R.color.background,
+                        null
                     )
-                    binding.equalizerIcon.visibility = View.GONE
-                    binding.selectedCheckIcon.visibility = View.GONE
-                }
-            })
+                )
+                binding.equalizerIcon.visibility = View.GONE
+                binding.selectedCheckIcon.visibility = View.GONE
+            }
         }
 
         companion object {
             fun from(
                 parent: ViewGroup,
-                isSoundPlaying: () -> Boolean,
                 soundTitles: List<String>,
-                clickListener: OnClickListener
+                clickListener: OnClickSoundTitleListener
             ): SoundTitleViewHolder {
                 val inflater = LayoutInflater.from(parent.context)
                 val binding = ViewSoundSettingSoundTitleBinding.inflate(inflater, parent, false)
-                return SoundTitleViewHolder(binding, isSoundPlaying, soundTitles, clickListener)
+                return SoundTitleViewHolder(binding, soundTitles, clickListener)
             }
         }
     }
 
-    class OnClickListener(val clickListener: (soundTitle: String) -> Unit) {
+    class OnClickSoundTitleListener(val clickListener: (soundTitle: String) -> Unit) {
         fun onClick(soundTitle: String) = clickListener(soundTitle)
     }
 
-    class OnChangeListener(private val changeListener: (soundVolume: Int) -> Unit) {
+    class OnChangeSoundVolumeListener(private val changeListener: (soundVolume: Int) -> Unit) {
         fun onChange(soundVolume: Int) = changeListener(soundVolume)
     }
 }

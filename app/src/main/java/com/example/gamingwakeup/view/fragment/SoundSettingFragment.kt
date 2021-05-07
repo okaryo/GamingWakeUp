@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gamingwakeup.R
@@ -20,12 +21,10 @@ class SoundSettingFragment : Fragment() {
     }
     private val soundSettingAdapter: SoundSettingAdapter by lazy {
         SoundSettingAdapter(
-            viewModel.selectedSoundTitle,
-            { viewModel.isSoundPlaying },
-            SoundSettingAdapter.OnClickListener { soundTitle ->
+            SoundSettingAdapter.OnClickSoundTitleListener { soundTitle ->
                 viewModel.onTapSoundTitle(soundTitle)
             },
-            SoundSettingAdapter.OnChangeListener { soundVolume ->
+            SoundSettingAdapter.OnChangeSoundVolumeListener { soundVolume ->
                 viewModel.onChangeSoundVolume(soundVolume)
             }
         )
@@ -40,6 +39,8 @@ class SoundSettingFragment : Fragment() {
         setupRecyclerView()
         setupToolbar()
         setupAdapter()
+        setupSoundTitleObserver()
+        setupMediaPlayerObserver()
 
         return binding.root
     }
@@ -63,6 +64,24 @@ class SoundSettingFragment : Fragment() {
             soundVolume = viewModel.volume
             notifyDataSetChanged()
         }
+    }
+
+    private fun setupSoundTitleObserver() {
+        viewModel.selectedSoundTitle.observe(viewLifecycleOwner, Observer {
+            soundSettingAdapter.apply {
+                selectedSoundTitle = it
+                notifyDataSetChanged()
+            }
+        })
+    }
+
+    private fun setupMediaPlayerObserver() {
+        viewModel.isSoundPlaying.observe(viewLifecycleOwner, Observer {
+            soundSettingAdapter.apply {
+                isSoundPlaying = it
+                notifyDataSetChanged()
+            }
+        })
     }
 
     private fun setupToolbar() {
