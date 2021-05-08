@@ -1,15 +1,17 @@
 package com.example.gamingwakeup.viewmodel
 
-import android.app.Application
 import android.content.ContentResolver
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import androidx.databinding.Observable
+import androidx.databinding.PropertyChangeRegistry
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.gamingwakeup.R
 import com.example.gamingwakeup.model.data.database.AlarmDatabase
 import com.example.gamingwakeup.model.data.repository.AlarmRepository
@@ -24,9 +26,11 @@ class AddEditAlarmViewModel private constructor(
     private val applicationContext: Context,
     alarm: Alarm?,
     calender: Calendar
-) : BaseObservable() {
-    @Bindable var hour: Int
-    @Bindable var minute: Int
+) : ViewModel(), Observable {
+    @Bindable
+    var hour: Int
+    @Bindable
+    var minute: Int
     val recurring: LiveData<Boolean>
         get() = _recurring
     val navigateToAlarmListFragment: LiveData<Boolean>
@@ -36,6 +40,7 @@ class AddEditAlarmViewModel private constructor(
     val soundTitle: String
         get() = _soundSetting.title
     private lateinit var _soundSetting: SoundSetting
+    private val callbacks = PropertyChangeRegistry()
     private var _alarmId: Int
     private val _recurring = MutableLiveData<Boolean>()
     private val _hasVibration = MutableLiveData<Boolean>()
@@ -72,6 +77,14 @@ class AddEditAlarmViewModel private constructor(
             _hasVibration.value = alarm.vibration
             _weeklyRecurringSetting = alarm.weeklyRecurring
         }
+    }
+
+    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        callbacks.add(callback)
+    }
+
+    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+        callbacks.remove(callback)
     }
 
     fun toolBarTitle(): String {
@@ -223,13 +236,18 @@ class AddEditAlarmViewModel private constructor(
         _navigateToAlarmListFragment.value = true
     }
 
-    companion object {
-        fun create(application: Application, alarm: Alarm?): AddEditAlarmViewModel {
-            val applicationContext = application.applicationContext
-            val calender = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"), Locale.JAPAN)
-            val database = AlarmDatabase.getInstance(applicationContext)
-            val repository = AlarmRepository(database)
-            return AddEditAlarmViewModel(repository, applicationContext, alarm, calender)
+    class Factory(private val context: Context, private val alarm: Alarm?) :
+        ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(AddEditAlarmViewModel::class.java)) {
+                val applicationContext = context.applicationContext
+                val calender =
+                    Calendar.getInstance(TimeZone.getTimeZone("Asia/Tokyo"), Locale.JAPAN)
+                val database = AlarmDatabase.getInstance(applicationContext)
+                val repository = AlarmRepository(database)
+                return AddEditAlarmViewModel(repository, applicationContext, alarm, calender) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class!")
         }
     }
 }
