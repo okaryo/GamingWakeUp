@@ -19,8 +19,7 @@ class AlarmListFragment : Fragment() {
     private lateinit var binding: FragmentAlarmListBinding
     private val viewModel: AlarmListViewModel by lazy {
         val activity = requireNotNull(this.activity)
-        AlarmListViewModel.Factory(activity.application)
-            .create(AlarmListViewModel::class.java)
+        AlarmListViewModel.Factory(activity.application).create(AlarmListViewModel::class.java)
     }
 
     override fun onCreateView(
