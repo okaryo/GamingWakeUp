@@ -10,30 +10,25 @@ import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.gamingwakeup.R
 import com.example.gamingwakeup.model.data.database.AlarmDatabase
 import com.example.gamingwakeup.model.data.repository.AlarmRepository
 import com.example.gamingwakeup.model.model.Alarm
 import com.example.gamingwakeup.model.model.SoundSetting
 import com.example.gamingwakeup.model.model.WeeklyRecurringSetting
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import java.util.*
 
 class AddEditAlarmViewModel private constructor(
     private val repository: AlarmRepository,
     private val applicationContext: Context,
-    private val alarm: Alarm?,
+    alarm: Alarm?,
     calender: Calendar
 ) : BaseObservable() {
-    @Bindable
-    var hour = calender.get(Calendar.HOUR_OF_DAY)
-    @Bindable
-    var minute = calender.get(Calendar.MINUTE)
+    @Bindable var hour: Int
+    @Bindable var minute: Int
     val recurring: LiveData<Boolean>
         get() = _recurring
-    val weeklyRecurringSetting: WeeklyRecurringSetting
-        get() = _weeklyRecurringSetting
     val navigateToAlarmListFragment: LiveData<Boolean>
         get() = _navigateToAlarmListFragment
     val toastMessageForAlarmListFragment: String
@@ -41,25 +36,32 @@ class AddEditAlarmViewModel private constructor(
     val soundTitle: String
         get() = _soundSetting.title
     private lateinit var _soundSetting: SoundSetting
-    private var _alarmId = 0
-    private val _recurring = MutableLiveData(true)
-    private val _hasVibration = MutableLiveData(true)
-    private var _weeklyRecurringSetting = WeeklyRecurringSetting(
-        monday = true,
-        tuesday = true,
-        wednesday = true,
-        thursday = true,
-        friday = true,
-        saturday = true,
-        sunday = true
-    )
-    private var isNewAlarm = false
+    private var _alarmId: Int
+    private val _recurring = MutableLiveData<Boolean>()
+    private val _hasVibration = MutableLiveData<Boolean>()
     private val _navigateToAlarmListFragment = MutableLiveData(false)
+    private var _weeklyRecurringSetting: WeeklyRecurringSetting
+    private var _isNewAlarm = false
     private var _toastMessageForAlarmListFragment = ""
 
     init {
+        if (alarm == null || alarm.id == 0) _isNewAlarm = true
+
         if (alarm == null) {
-            isNewAlarm = true
+            _alarmId = 0
+            hour = calender.get(Calendar.HOUR_OF_DAY)
+            minute = calender.get(Calendar.MINUTE)
+            _recurring.value = true
+            _hasVibration.value = true
+            _weeklyRecurringSetting = WeeklyRecurringSetting(
+                monday = true,
+                tuesday = true,
+                wednesday = true,
+                thursday = true,
+                friday = true,
+                saturday = true,
+                sunday = true
+            )
             setupDefaultSoundSetting()
         } else {
             _alarmId = alarm.id
@@ -72,39 +74,29 @@ class AddEditAlarmViewModel private constructor(
         }
     }
 
+    fun toolBarTitle(): String {
+        return if (_isNewAlarm) {
+            applicationContext.getString(R.string.toolbar_title_create_alarm)
+        } else {
+            applicationContext.getString(R.string.toolbar_title_edit_alarm)
+        }
+    }
+
     fun onVibrationValueChanged(isChecked: Boolean) {
         _hasVibration.value = isChecked
     }
 
     fun saveAndScheduleAlarm() {
         try {
-            val currentHasVibration = _hasVibration.value ?: return
-            val alarm = Alarm(
-                id = _alarmId,
-                hour = hour,
-                minute = minute,
-                sound = _soundSetting,
-                vibration = currentHasVibration,
-                recurring = true,
-                weeklyRecurring = WeeklyRecurringSetting(
-                    monday = true,
-                    tuesday = true,
-                    wednesday = true,
-                    thursday = true,
-                    friday = true,
-                    saturday = true,
-                    sunday = true
-                ),
-                active = true
-            )
+            val alarm = currentAlarm()
             runBlocking {
-                if (isNewAlarm) {
-                    createAlarm(alarm)
+                if (_isNewAlarm) {
+                    withContext(Dispatchers.IO) { alarm.create(repository) }
                 } else {
-                    updateAlarm(alarm)
+                    withContext(Dispatchers.IO) { alarm.update(repository) }
                 }
-                scheduleAlarm(alarm) // TODO: ここは非同期で扱えないか調査
             }
+            GlobalScope.launch { scheduleAlarm(alarm) }
             navigateBackToAlarmListFragment("Alarm set to ${alarm.clockTimeStringFormat()}")
         } catch (e: Exception) {
             navigateBackToAlarmListFragment("Failed to set alarm.")
@@ -114,7 +106,7 @@ class AddEditAlarmViewModel private constructor(
     fun deleteAlarm() {
         try {
             runBlocking {
-                if (!isNewAlarm) {
+                if (!_isNewAlarm) {
                     val alarm = Alarm.find(_alarmId, repository)
                     alarm.delete(repository)
                 }
@@ -221,10 +213,6 @@ class AddEditAlarmViewModel private constructor(
             }
         }
     }
-
-    private fun createAlarm(alarm: Alarm) = GlobalScope.launch { alarm.create(repository) }
-
-    private fun updateAlarm(alarm: Alarm) = GlobalScope.launch { alarm.update(repository) }
 
     private fun scheduleAlarm(alarm: Alarm) {
         alarm.schedule(applicationContext)
