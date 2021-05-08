@@ -15,6 +15,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavHostFragment() {
         val navController = findNavController(R.id.nav_host_fragment)
         val bundle = Bundle().apply { putString("toastMessage", "") }
-        navController.setGraph(R.navigation.main_nav_graph, bundle)
+        navController.setGraph(R.navigation.nav_graph, bundle)
     }
 }
