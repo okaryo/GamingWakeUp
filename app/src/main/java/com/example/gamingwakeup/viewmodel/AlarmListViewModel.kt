@@ -35,9 +35,7 @@ class AlarmListViewModel(private val repository: AlarmListRepository) : ViewMode
             if (modelClass.isAssignableFrom(AlarmListViewModel::class.java)) {
                 val database = AlarmDatabase.getInstance(application.applicationContext)
                 val repository = AlarmListRepository(database)
-                return AlarmListViewModel(
-                    repository
-                ) as T
+                return AlarmListViewModel(repository) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class!")
         }

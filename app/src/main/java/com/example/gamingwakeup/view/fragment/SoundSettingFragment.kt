@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gamingwakeup.R
@@ -17,7 +18,9 @@ class SoundSettingFragment : Fragment() {
     private lateinit var binding: FragmentSoundSettingBinding
     private val viewModel: SoundSettingViewModel by lazy {
         val arguments = SoundSettingFragmentArgs.fromBundle(requireArguments())
-        SoundSettingViewModel.crate(arguments.alarm, requireContext())
+        val activity = requireNotNull(this.activity)
+        val factory = SoundSettingViewModel.Factory(activity.applicationContext, arguments.alarm)
+        ViewModelProvider(this, factory).get(SoundSettingViewModel::class.java)
     }
     private val soundSettingAdapter: SoundSettingAdapter by lazy {
         SoundSettingAdapter(

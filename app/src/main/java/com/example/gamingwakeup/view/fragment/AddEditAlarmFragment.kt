@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.gamingwakeup.R
@@ -19,7 +20,8 @@ class AddEditAlarmFragment : Fragment() {
     private val viewModel: AddEditAlarmViewModel by lazy {
         arguments = AddEditAlarmFragmentArgs.fromBundle(requireArguments())
         val activity = requireNotNull(this.activity)
-        AddEditAlarmViewModel.create(activity.application, arguments.alarm)
+        val factory = AddEditAlarmViewModel.Factory(activity.applicationContext, arguments.alarm)
+        ViewModelProvider(this, factory).get(AddEditAlarmViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -137,9 +139,15 @@ class AddEditAlarmFragment : Fragment() {
         )
         val changeButtonStyle = { button: View, recurringSetting: Boolean ->
             button.background = if (recurringSetting) {
-                resources.getDrawable(R.drawable.shape_weekly_recurring_setting_button_selected, null)
+                resources.getDrawable(
+                    R.drawable.shape_weekly_recurring_setting_button_selected,
+                    null
+                )
             } else {
-                resources.getDrawable(R.drawable.shape_weekly_recurring_setting_button_unselected, null)
+                resources.getDrawable(
+                    R.drawable.shape_weekly_recurring_setting_button_unselected,
+                    null
+                )
             }
         }
         weeklyRecurringSettingButtons.forEachIndexed { index, button ->
