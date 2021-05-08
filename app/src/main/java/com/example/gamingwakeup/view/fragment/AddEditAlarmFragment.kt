@@ -60,9 +60,7 @@ class AddEditAlarmFragment : Fragment() {
 
     private fun setupToolbar() {
         binding.toolbar.apply {
-            title = if (arguments.alarm == null) getString(R.string.toolbar_title_create_alarm)
-            else getString(R.string.toolbar_title_edit_alarm)
-
+            title = viewModel.toolBarTitle()
             setNavigationIcon(R.drawable.ic_arrow_back)
             setNavigationOnClickListener {
                 this.findNavController()

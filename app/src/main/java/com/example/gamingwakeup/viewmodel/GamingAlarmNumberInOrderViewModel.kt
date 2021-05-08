@@ -44,17 +44,18 @@ class GamingAlarmNumberInOrderViewModel : ViewModel(), GamingAlarmBaseViewModel 
     }
 
     private fun startTimeScheduler() {
-        val updateCurrentTime = {
-            val currentTime = LocalTime.now()
-            _currentTimeHour.value = currentTime.hour
-            _currentTimeMinute.value = currentTime.minute
-        }
         viewModelScope.launch {
             while (!_isComplete.value!!) {
-                delay(10000)
+                delay(1000)
                 updateCurrentTime()
             }
         }
+    }
+
+    private fun updateCurrentTime() {
+        val currentTime = LocalTime.now()
+        _currentTimeHour.value = currentTime.hour
+        _currentTimeMinute.value = currentTime.minute
     }
 
     class Factory(private val gamingAlarm: GamingAlarmBase) : ViewModelProvider.Factory {
