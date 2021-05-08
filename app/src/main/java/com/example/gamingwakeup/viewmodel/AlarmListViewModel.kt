@@ -20,10 +20,9 @@ class AlarmListViewModel(private val repository: AlarmListRepository) : ViewMode
 
     init {
         viewModelScope.launch {
-            val alarmList = withContext(Dispatchers.IO) {
-                repository.getAlarmList()
+            _alarmList.value = withContext(Dispatchers.IO) {
+                repository.getAlarmList().sort()
             }
-            _alarmList.value = alarmList.sort()
         }
     }
 
