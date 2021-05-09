@@ -1,7 +1,7 @@
 package com.example.gamingwakeup.viewmodel
 
 import androidx.lifecycle.*
-import com.example.gamingwakeup.model.model.GamingAlarmBase
+import com.example.gamingwakeup.model.GamingAlarmBase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalTime
