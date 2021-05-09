@@ -1,6 +1,6 @@
-package com.example.gamingwakeup.model.data.mapper
+package com.example.gamingwakeup.data.mapper
 
-import com.example.gamingwakeup.model.model.WeeklyRecurringSetting
+import com.example.gamingwakeup.model.WeeklyRecurringSetting
 
 class WeeklyRecurringSettingMapper {
     companion object {

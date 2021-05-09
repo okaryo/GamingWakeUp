@@ -3,10 +3,7 @@ package com.example.gamingwakeup.view.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gamingwakeup.R
-import com.example.gamingwakeup.model.model.GamingAlarmNumberInOrder
-import com.example.gamingwakeup.view.fragment.AlarmListFragment
 import com.example.gamingwakeup.view.fragment.GamingAlarmNumberInOrderFragment
-import com.example.gamingwakeup.viewmodel.GamingAlarmNumberInOrderViewModel
 
 class GamingAlarmActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

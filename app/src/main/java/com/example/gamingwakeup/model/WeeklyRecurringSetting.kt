@@ -1,4 +1,4 @@
-package com.example.gamingwakeup.model.model
+package com.example.gamingwakeup.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

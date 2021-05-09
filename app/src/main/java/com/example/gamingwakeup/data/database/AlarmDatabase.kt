@@ -1,10 +1,10 @@
-package com.example.gamingwakeup.model.data.database
+package com.example.gamingwakeup.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.gamingwakeup.model.data.entity.AlarmEntity
+import com.example.gamingwakeup.data.entity.AlarmEntity
 
 @Database(entities = [AlarmEntity::class], version = 1)
 abstract class AlarmDatabase : RoomDatabase() {

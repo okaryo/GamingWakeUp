@@ -1,9 +1,9 @@
-package com.example.gamingwakeup.model.data.repository
+package com.example.gamingwakeup.data.repository
 
-import com.example.gamingwakeup.model.data.database.AlarmDatabase
-import com.example.gamingwakeup.model.data.entity.AlarmEntity
-import com.example.gamingwakeup.model.data.mapper.AlarmMapper
-import com.example.gamingwakeup.model.model.Alarm
+import com.example.gamingwakeup.data.database.AlarmDatabase
+import com.example.gamingwakeup.data.entity.AlarmEntity
+import com.example.gamingwakeup.data.mapper.AlarmMapper
+import com.example.gamingwakeup.model.Alarm
 
 class AlarmRepository(private val database: AlarmDatabase) {
     suspend fun getAlarm(alarmId: Int): Alarm {

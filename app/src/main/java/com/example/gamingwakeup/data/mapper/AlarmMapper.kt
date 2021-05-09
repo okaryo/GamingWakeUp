@@ -1,7 +1,7 @@
-package com.example.gamingwakeup.model.data.mapper
+package com.example.gamingwakeup.data.mapper
 
-import com.example.gamingwakeup.model.data.entity.AlarmEntity
-import com.example.gamingwakeup.model.model.Alarm
+import com.example.gamingwakeup.data.entity.AlarmEntity
+import com.example.gamingwakeup.model.Alarm
 
 class AlarmMapper {
     companion object {

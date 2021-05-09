@@ -1,4 +1,4 @@
-package com.example.gamingwakeup.model.data.entity
+package com.example.gamingwakeup.data.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

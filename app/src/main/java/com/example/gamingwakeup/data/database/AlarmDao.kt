@@ -1,7 +1,7 @@
-package com.example.gamingwakeup.model.data.database
+package com.example.gamingwakeup.data.database
 
 import androidx.room.*
-import com.example.gamingwakeup.model.data.entity.AlarmEntity
+import com.example.gamingwakeup.data.entity.AlarmEntity
 
 @Dao
 interface AlarmDao {
