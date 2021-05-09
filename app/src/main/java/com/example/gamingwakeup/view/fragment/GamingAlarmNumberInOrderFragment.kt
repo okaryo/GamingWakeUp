@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.gamingwakeup.R
 import com.example.gamingwakeup.databinding.FragmentGamingAlarmNumberInOrderBinding
-import com.example.gamingwakeup.model.model.GamingAlarmNumberInOrder
+import com.example.gamingwakeup.model.GamingAlarmNumberInOrder
 import com.example.gamingwakeup.viewmodel.GamingAlarmNumberInOrderViewModel
 
 class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAlarmBaseFragment {
