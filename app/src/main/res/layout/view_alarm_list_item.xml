@@ -7,7 +7,7 @@
 
         <variable
             name="alarm"
-            type="com.example.gamingwakeup.model.model.Alarm" />
+            type="com.example.gamingwakeup.model.Alarm" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
