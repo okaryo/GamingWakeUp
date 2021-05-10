@@ -1,4 +1,4 @@
-package com.example.gamingwakeup.model
+package com.example.gamingwakeup.model.alarm
 
 data class AlarmList(
     val values: List<Alarm>

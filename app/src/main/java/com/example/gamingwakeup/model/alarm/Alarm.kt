@@ -1,4 +1,4 @@
-package com.example.gamingwakeup.model
+package com.example.gamingwakeup.model.alarm
 
 import android.app.AlarmManager
 import android.app.PendingIntent
