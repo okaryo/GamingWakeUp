@@ -1,6 +1,6 @@
 package com.example.gamingwakeup.data.mapper
 
-import com.example.gamingwakeup.model.SoundSetting
+import com.example.gamingwakeup.model.alarm.SoundSetting
 
 class SoundSettingMapper {
     companion object {
