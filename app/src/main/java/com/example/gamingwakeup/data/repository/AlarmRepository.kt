@@ -3,7 +3,7 @@ package com.example.gamingwakeup.data.repository
 import com.example.gamingwakeup.data.database.AlarmDatabase
 import com.example.gamingwakeup.data.entity.AlarmEntity
 import com.example.gamingwakeup.data.mapper.AlarmMapper
-import com.example.gamingwakeup.model.Alarm
+import com.example.gamingwakeup.model.alarm.Alarm
 
 class AlarmRepository(private val database: AlarmDatabase) {
     suspend fun getAlarm(alarmId: Int): Alarm {

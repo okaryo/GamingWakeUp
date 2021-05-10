@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.gamingwakeup.data.database.AlarmDatabase
 import com.example.gamingwakeup.data.repository.AlarmListRepository
-import com.example.gamingwakeup.model.Alarm
-import com.example.gamingwakeup.model.AlarmList
+import com.example.gamingwakeup.model.alarm.Alarm
+import com.example.gamingwakeup.model.alarm.AlarmList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

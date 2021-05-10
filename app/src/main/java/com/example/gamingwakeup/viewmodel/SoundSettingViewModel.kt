@@ -9,8 +9,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.gamingwakeup.model.Alarm
-import com.example.gamingwakeup.model.SoundSetting
+import com.example.gamingwakeup.model.alarm.Alarm
+import com.example.gamingwakeup.model.alarm.SoundSetting
 
 class SoundSettingViewModel private constructor(
     private val alarm: Alarm,

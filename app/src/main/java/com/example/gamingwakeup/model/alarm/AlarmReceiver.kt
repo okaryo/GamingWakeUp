@@ -1,8 +1,9 @@
-package com.example.gamingwakeup.model
+package com.example.gamingwakeup.model.alarm
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.example.gamingwakeup.model.AlarmService
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

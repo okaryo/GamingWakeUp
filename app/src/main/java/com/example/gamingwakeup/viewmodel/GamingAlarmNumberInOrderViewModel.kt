@@ -1,12 +1,13 @@
 package com.example.gamingwakeup.viewmodel
 
 import androidx.lifecycle.*
-import com.example.gamingwakeup.model.GamingAlarmBase
+import com.example.gamingwakeup.model.game.GameNumberInOrder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 
-class GamingAlarmNumberInOrderViewModel : ViewModel(), GamingAlarmBaseViewModel {
+class GamingAlarmNumberInOrderViewModel(private val gamingAlarm: GameNumberInOrder) : ViewModel(),
+    GamingAlarmBaseViewModel {
     override val isComplete: LiveData<Boolean>
         get() = _isComplete
     override val isFailure: LiveData<Boolean>
@@ -17,7 +18,6 @@ class GamingAlarmNumberInOrderViewModel : ViewModel(), GamingAlarmBaseViewModel 
         get() = _currentTimeMinute
     private val _isComplete = MutableLiveData(false)
     private val _isFailure = MutableLiveData(false)
-    private val tappedNumber = mutableListOf<Int>()
     private val _currentTimeHour = MutableLiveData<Int>()
     private val _currentTimeMinute = MutableLiveData<Int>()
 
@@ -29,18 +29,12 @@ class GamingAlarmNumberInOrderViewModel : ViewModel(), GamingAlarmBaseViewModel 
     }
 
     fun onTappedNumberButton(number: Int): Boolean {
-        val lastNumber = 9
-        val nextCorrectNumber = tappedNumber.size + 1
-        val isGameComplete = number == lastNumber && number == nextCorrectNumber
-        if (number != nextCorrectNumber) {
-            tappedNumber.clear()
-            return false
+        return if (gamingAlarm.verifySubmission(number)) {
+            if (gamingAlarm.isCompleted()) _isComplete.value = true
+            true
+        } else {
+            false
         }
-        if (isGameComplete) {
-            _isComplete.value = true
-        }
-        tappedNumber.add(number)
-        return true
     }
 
     private fun startTimeScheduler() {
@@ -58,10 +52,10 @@ class GamingAlarmNumberInOrderViewModel : ViewModel(), GamingAlarmBaseViewModel 
         _currentTimeMinute.value = currentTime.minute
     }
 
-    class Factory(private val gamingAlarm: GamingAlarmBase) : ViewModelProvider.Factory {
+    class Factory(private val gamingAlarm: GameNumberInOrder) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(GamingAlarmNumberInOrderViewModel::class.java)) {
-                return GamingAlarmNumberInOrderViewModel() as T
+                return GamingAlarmNumberInOrderViewModel(gamingAlarm) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class!")
         }
