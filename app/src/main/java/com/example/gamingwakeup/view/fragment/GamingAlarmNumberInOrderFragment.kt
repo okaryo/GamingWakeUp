@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.gamingwakeup.R
 import com.example.gamingwakeup.databinding.FragmentGamingAlarmNumberInOrderBinding
-import com.example.gamingwakeup.model.GamingAlarmNumberInOrder
+import com.example.gamingwakeup.model.game.GameNumberInOrder
 import com.example.gamingwakeup.viewmodel.GamingAlarmNumberInOrderViewModel
 
 class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAlarmBaseFragment {
@@ -21,7 +21,7 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
     override val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     private lateinit var binding: FragmentGamingAlarmNumberInOrderBinding
     private val viewModel: GamingAlarmNumberInOrderViewModel by lazy {
-        val gamingAlarm = GamingAlarmNumberInOrder()
+        val gamingAlarm = GameNumberInOrder()
         GamingAlarmNumberInOrderViewModel.Factory(gamingAlarm).create(
             GamingAlarmNumberInOrderViewModel::class.java
         )
@@ -35,7 +35,7 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setupBinding(inflater, container)
         setupNumberButton()
         observeOnGameCompleted()
@@ -59,6 +59,7 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
         })
     }
 
+    // TODO: ViewModelでやるべし
     override fun startAlarmAndVibration() {
         mediaPlayer.isLooping = true
         mediaPlayer.start()
@@ -71,6 +72,7 @@ class GamingAlarmNumberInOrderFragment(context: Context) : Fragment(), GamingAla
         }
     }
 
+    // TODO: ViewModelでやるべし
     override fun stopAlarmAndVibration() {
         mediaPlayer.stop()
     }
