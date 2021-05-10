@@ -22,9 +22,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/soundVolumeSeekbar"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_volume_mute" />
@@ -36,7 +34,6 @@
             android:progress="@{volume}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView5"
-            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,11 +43,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/soundVolumeSeekbar"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_volume_up" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
