@@ -17,6 +17,6 @@ class GameNumberInOrder : GameBase() {
     }
 
     fun isCompleted(): Boolean {
-        return _submittedNumbers.size + 1 == _lastNumber
+        return _submittedNumbers.size == _lastNumber
     }
 }
