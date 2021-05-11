@@ -33,8 +33,8 @@ class AlarmListAdapter(private val onClickListener: OnClickListener) :
     private fun setupWeeklyRecurringTextColor(holder: AlarmListItemViewHolder, alarm: Alarm) {
         val binding = holder.binding
         val resource = holder.itemView.resources
-        val changeTextColor = { recurring: Boolean, text: TextView ->
-            if (recurring) text.setTextColor(
+        val changeTextColor = { weekOfDayRecurring: Boolean, text: TextView ->
+            if (alarm.recurring && weekOfDayRecurring) text.setTextColor(
                 ResourcesCompat.getColor(
                     resource,
                     R.color.primary_light,

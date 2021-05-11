@@ -116,15 +116,14 @@ class AddEditAlarmFragment : Fragment() {
 
     private fun setupRecurringSettingSection() {
         val recurringCheckbox = binding.recurringCheckbox
+        val weeklyRecurringSettingSection = binding.WeeklyRecurringSettingSection
         recurringCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            val weeklyRecurringSettingSection = binding.WeeklyRecurringSettingSection
             viewModel.onChangeRecurringSetting(isChecked)
-            if (isChecked) {
-                weeklyRecurringSettingSection.visibility = View.VISIBLE
-            } else {
-                weeklyRecurringSettingSection.visibility = View.GONE
-            }
         }
+        viewModel.recurring.observe(viewLifecycleOwner, Observer {
+            recurringCheckbox.isChecked = it
+            weeklyRecurringSettingSection.visibility = if (it) View.VISIBLE else View.GONE
+        })
     }
 
     private fun setupWeeklyRecurringSettingSection() {
