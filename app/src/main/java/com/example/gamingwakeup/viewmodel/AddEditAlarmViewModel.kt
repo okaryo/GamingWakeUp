@@ -136,17 +136,9 @@ class AddEditAlarmViewModel private constructor(
             hour = hour,
             minute = minute,
             vibration = _hasVibration.value!!,
-            recurring = true,
+            recurring = _recurring.value!!,
             sound = _soundSetting,
-            weeklyRecurring = WeeklyRecurringSetting(
-                monday = true,
-                tuesday = true,
-                wednesday = true,
-                thursday = true,
-                friday = true,
-                saturday = true,
-                sunday = true
-            ),
+            weeklyRecurring = _weeklyRecurringSetting,
             active = true
         )
     }
